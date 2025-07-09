@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Envíos - ElectroHogar</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <link rel="stylesheet" href="styles/estilos.css">
+    
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-light bg-primary shadow-sm py-3">
+    <div class="container">
+        <a class="navbar-brand fw-bold text-white" href="index.html"> <img src="imagenes/logo.png" alt="Logo" width="80" height="80" class="me-2">ElectroHogar</a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
+          aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
+          <ul class="navbar-nav">
+            <li class="nav-item">
+              <a class="nav-link mx-2 active" aria-current="page" href="index.html">Inicio</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link mx-2" href="productos.html">Productos</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link mx-2" href="acerca.html">Acerca</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link mx-2" href="contacto.html">Contacto</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link mx-2" href="blog.html">Blog</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link mx-2" href="clientes.html">Subscribete a las noticias</a>
+            </li>
+          </ul>
+        </div>
+    </div>
+  </nav>
+
+    <main class="envios-container">
+        <!-- Sección Hero -->
+        <section class="envios-hero">
+            <div class="hero-content">
+                <h1 class="hero-title animate-slide-down">Entregas Rápidas y Seguras</h1>
+                <p class="hero-subtitle">Llevamos la tecnología a tu hogar</p>
+            </div>
+        </section>
+
+        <!-- Contenido Principal -->
+        <div class="container">
+            <!-- Opciones de Envío -->
+            <section class="shipping-options">
+                <h2 class="section-title">Métodos de Envío</h2>
+                <div class="options-grid">
+                    <div class="option-card standard">
+                        <i class="fas fa-truck"></i>
+                        <h3>Estándar</h3>
+                        <div class="option-details">
+                            <p class="delivery-time">3-5 días hábiles</p>
+                            <p class="price">Gratis en compras > S/.500</p>
+                        </div>
+                    </div>
+
+                    <div class="option-card express">
+                        <i class="fas fa-bolt"></i>
+                        <h3>Express</h3>
+                        <div class="option-details">
+                            <p class="delivery-time">24-48 horas</p>
+                            <p class="price">S/.15.00 adicionales</p>
+                        </div>
+                    </div>
+
+                    <div class="option-card premium">
+                        <i class="fas fa-star"></i>
+                        <h3>Premium</h3>
+                        <div class="option-details">
+                            <p class="delivery-time">Mismo día</p>
+                            <p class="price">S/.25.00 adicionales</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Seguimiento de Pedidos -->
+            <section class="tracking-section">
+                <h2 class="section-title">Rastrea tu Pedido</h2>
+                <div class="tracking-form">
+                    <div class="input-group">
+                        <input type="text" class="form-control" placeholder="Ingresa tu número de seguimiento">
+                        <button class="btn btn-primary">
+                            <i class="fas fa-search"></i> Rastrear
+                        </button>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Mapa de Cobertura -->
+            <section class="coverage-section">
+                <h2 class="section-title">Cobertura Nacional</h2>
+                <div class="coverage-map">
+                    <div class="map-marker lima">
+                        <i class="fas fa-map-marker-alt"></i>
+                        <span>Lima</span>
+                    </div>
+                    <div class="map-marker arequipa">
+                        <i class="fas fa-map-marker-alt"></i>
+                        <span>Arequipa</span>
+                    </div>
+                    <!-- Agregar más marcadores -->
+                </div>
+            </section>
+
+            
+        </div>
+    </main>
+
+    <footer class="bg-dark text-white pt-5">
+  <div class="container">
+    <div class="row g-4">
+      <!-- Columna 1: Contacto -->
+      <div class="col-md-4">
+        <h5 class="text-warning mb-3">Contacto</h5>
+        <ul class="list-unstyled">
+          <li class="mb-2">
+            <i class="fas fa-map-marker-alt me-2"></i>
+            Av. Ampatacocha 301, Arequipa, Perú
+          </li>
+          <li class="mb-2">
+            <i class="fas fa-phone me-2"></i>
+            <a href="tel:+51987654321" class="text-white">+51 987 654 321</a>
+          </li>
+          <li>
+            <i class="fas fa-envelope me-2"></i>
+            <a href="mailto:info@electrohogar.com" class="text-white">info@electrohogar.com</a>
+          </li>
+        </ul>
+      </div>
+
+      <!-- Columna 2: Enlaces Rápidos -->
+      <div class="col-md-4">
+        <h5 class="text-warning mb-3">Enlaces Rápidos</h5>
+        <ul class="list-unstyled">
+          <li class="mb-2"><a href="productos.html" class="text-white">Productos Destacados</a></li>
+          <li class="mb-2"><a href="politicas.html" class="text-white">Política de Garantías</a></li>
+          <li class="mb-2"><a href="envios.html" class="text-white">Envíos y Devoluciones</a></li>
+          <li><a href="faq.html" class="text-white">Preguntas Frecuentes</a></li>
+        </ul>
+      </div>
+
+      <!-- Columna 3: Redes Sociales y Newsletter -->
+      <div class="col-md-4">
+        <h5 class="text-warning mb-3">Síguenos</h5>
+        <div class="social-icons mb-4">
+          <a href="https://www.facebook.com/" class="text-white me-3"><i class="fab fa-facebook fa-2x"></i></a>
+          <a href="https://www.instagram.com/" class="text-white me-3"><i class="fab fa-instagram fa-2x"></i></a>
+          <a href="https://www.tiktok.com/" class="text-white"><i class="fab fa-tiktok fa-2x"></i></a>
+        </div>
+        
+        <h5 class="text-warning mb-3">Newsletter</h5>
+        <form class="newsletter-form">
+          <div class="input-group">
+            <input type="email" class="form-control" placeholder="Tu correo electrónico">
+            <button class="btn btn-warning" type="button">
+              <i class="fas fa-paper-plane"></i>
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <!-- Línea Separadora -->
+    <hr class="my-4">
+
+    <!-- Copyright y Métodos de Pago -->
+    <div class="row">
+        <div class="col-md-6 text-center text-md-start">
+          <p class="mb-0">&copy; 2025 ElectroHogar. Todos los derechos reservados.</p>
+        </div>
+        <div class="col-md-6 text-center text-md-end">
+          <img src="https://beautyaddicts.pe/cdn/shop/files/Medios-de-pago_ee0cb69a-3d11-462d-b6a2-712657473a65.svg?v=1716854670&width=1584" alt="Métodos de pago" class="img-fluid payment-methods">
+        </div>
+      </div>
+    </div>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

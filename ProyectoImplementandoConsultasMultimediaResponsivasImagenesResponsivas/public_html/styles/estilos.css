@@ -1,0 +1,813 @@
+/* ==================== */
+/* RESET Y ESTILOS BASE */
+/* ==================== */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html, body {
+  height: 100%;
+}
+
+body {
+  font-family: 'Poppins', sans-serif;
+  line-height: 1.6;
+  background-color: #f9f9f9;
+  color: #333;
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+main {
+  flex: 1;
+}
+
+
+/* ================= */
+/* TIPOGRAFÍA */
+/* ================= */
+h1, h2, h3, h4, h5, h6 {
+  font-weight: 600;
+}
+
+.hero h1 {
+  text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+}
+
+.hero p {
+  font-size: 1.25rem;
+}
+
+.faq-titulo {
+  text-align: center;
+  font-size: 2.5rem;
+  color: #2c3e50;
+  margin-bottom: 3rem;
+  position: relative;
+}
+
+.faq-titulo::after {
+  content: '';
+  display: block;
+  width: 60px;
+  height: 4px;
+  background: #0d6efd;
+  margin: 1rem auto;
+}
+
+.politica-header h2 {
+  margin: 0;
+  font-size: 1.5rem;
+}
+
+.politica-item h3 {
+  display: flex;
+  align-items: center;
+  gap: 0.8rem;
+  font-size: 1.1rem;
+  color: #2c3e50;
+}
+
+.hero-title {
+  font-size: 3.5rem;
+  margin-bottom: 1rem;
+}
+
+.delivery-time {
+  font-size: 1.2rem;
+  font-weight: 600;
+  color: #0d6efd;
+}
+
+.price {
+  color: #666;
+  font-size: 0.9rem;
+}
+
+
+
+/* LAYOUT - FLEXBOX */
+.navbar {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.navbar-nav {
+  display: flex;
+  gap: 1.5rem;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.card {
+  display: flex;
+  flex-direction: column;
+}
+
+.card-body {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.faq-pregunta {
+  display: flex;
+  align-items: center;
+}
+
+.politica-header {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.btn-seguimiento {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.faq-question {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.map-marker {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.envios-hero {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+}
+
+
+/* LAYOUT - GRID */
+
+.productos-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 1.5rem;
+}
+
+footer {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 2rem;
+}
+
+.about-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 40px;
+  margin: 60px 0;
+}
+
+.values-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 30px;
+  margin: 50px 0;
+}
+
+.info-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 2rem;
+  margin: 4rem 0;
+}
+
+.faq-grid {
+  display: grid;
+  gap: 1.5rem;
+}
+
+.politicas-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 2rem;
+  margin-top: 3rem;
+}
+
+.options-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 2rem;
+  margin: 3rem 0;
+}
+
+
+/* COMPONENTES */
+
+
+/* Navbar */
+.navbar {
+  position: relative;
+  z-index: 1000;
+}
+
+.navbar-brand {
+  font-size: 1.5rem;
+}
+
+.navbar-nav .nav-link {
+  transition: background-color 0.3s ease, color 0.3s ease;
+  border-radius: 8px;
+  padding: 8px 12px;
+}
+
+.nav-link:hover {
+  background-color: #007bff;
+  color: white !important;
+}
+
+/* Marquee */
+marquee {
+  font-size: 1.1rem;
+  letter-spacing: 0.5px;
+  padding: 8px 0;
+  background: linear-gradient(90deg, #ffd700 0%, #ffec8b 50%, #ffd700 100%);
+}
+
+.marquee-container {
+  position: relative;
+  z-index: 500;
+}
+
+/* Cards */
+.card {
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  cursor: pointer;
+}
+
+.card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 10px 20px rgba(0,0,0,0.15);
+}
+
+.card img {
+  height: 200px;
+  object-fit: cover;
+  transition: transform 0.3s ease;
+}
+
+.card:hover img {
+  transform: scale(1.02);
+}
+
+.about-card {
+  background: white;
+  padding: 2rem;
+  border-radius: 15px;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+  transition: transform 0.3s ease;
+  text-align: center;
+}
+
+.about-card:hover {
+  transform: translateY(-10px);
+}
+
+.mission-card {
+  background: #fff;
+  padding: 30px;
+  border-radius: 15px;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+  transition: all 0.3s ease;
+  border-left: 5px solid #0d6efd;
+}
+
+.mission-card:hover {
+  transform: translateY(-10px);
+}
+
+.value-item {
+  background: #f8f9fa;
+  padding: 25px;
+  border-radius: 10px;
+  text-align: center;
+  border: 2px solid #0d6efd;
+}
+
+.value-item:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+}
+
+.info-card {
+  background: white;
+  padding: 2rem;
+  border-radius: 15px;
+  box-shadow: 0 5px 20px rgba(0,0,0,0.05);
+}
+
+.politica-card {
+  background: #fff;
+  border-radius: 15px;
+  box-shadow: 0 5px 25px rgba(0,0,0,0.08);
+  padding: 2rem;
+  transition: transform 0.3s ease;
+}
+
+.politica-card:hover {
+  transform: translateY(-5px);
+}
+
+.option-card {
+  background: white;
+  padding: 2rem;
+  border-radius: 15px;
+  box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+  transition: all 0.3s ease;
+}
+.faq-item {
+  background: #fff;
+  border-radius: 10px;
+  box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+  overflow: hidden;
+  margin-bottom: 1rem;
+  opacity: 0;
+  transform: translateY(20px);
+  animation: fadeInUp 0.6s ease-out forwards;
+}
+
+.faq-toggle {
+  display: none;
+}
+
+.faq-pregunta {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1.5rem;
+  cursor: pointer;
+  background: #f8f9fa;
+  transition: background 0.3s ease;
+}
+
+.faq-pregunta:hover {
+  background: #e9ecef;
+}
+
+.faq-icon {
+  transition: transform 0.3s ease;
+  margin-left: 1rem;
+}
+
+.faq-respuesta {
+  max-height: 0;
+  overflow: hidden;
+  padding: 0 1.5rem;
+  transition: all 0.4s ease;
+}
+
+/* Estado abierto */
+.faq-toggle:checked + .faq-pregunta + .faq-respuesta {
+  max-height: 1000px; /* Valor suficientemente grande */
+  padding: 0 1.5rem 1.5rem;
+}
+
+.faq-toggle:checked + .faq-pregunta .faq-icon {
+  transform: rotate(180deg);
+}
+
+
+/* Carousel */
+.carousel {
+  margin-top: -10px;
+}
+
+.carousel-item {
+  height: 80vh;
+  min-height: 500px;
+}
+
+.carousel-item img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+}
+
+.carousel-caption {
+  bottom: 20%;
+  background-color: rgba(0,0,0,0.5);
+  border-radius: 8px;
+}
+
+/* FAQ Items */
+.faq-item {
+  background: #fff;
+  border-radius: 10px;
+  box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+  overflow: hidden;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  /* Animación para FAQ */
+  opacity: 0;
+  transform: translateY(20px);
+  animation: fadeInUp 0.6s ease-out forwards;
+}
+
+.faq-pregunta {
+  padding: 1.5rem;
+  cursor: pointer;
+  background: #f8f9fa;
+  transition: background 0.3s ease;
+}
+
+.faq-pregunta:hover {
+  background: #e9ecef;
+}
+
+.faq-icon {
+  margin-right: 1rem;
+  transition: transform 0.3s ease;
+}
+
+.faq-respuesta {
+  max-height: 0;
+  overflow: hidden;
+  padding: 0 1.5rem;
+  transition: all 0.4s ease;
+}
+
+/* Botones */
+.btn-seguimiento {
+  background: #0d6efd;
+  color: white;
+  border: none;
+  padding: 0.8rem 1.5rem;
+  border-radius: 25px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.btn-seguimiento:hover {
+  background: #0b5ed7;
+  transform: scale(1.05);
+}
+
+/* Iconos */
+.card-icon {
+  width: 80px;
+  height: 80px;
+  background: #0d6efd;
+  border-radius: 50%;
+  margin: -60px auto 1rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 2rem;
+  color: white;
+}
+
+.value-item i {
+  font-size: 2.5rem;
+  color: #0d6efd;
+  margin-bottom: 1rem;
+}
+
+.politica-item i {
+  color: #0d6efd;
+  min-width: 25px;
+}
+
+.politica-header i {
+  font-size: 2rem;
+  color: #0d6efd;
+}
+
+.option-card i {
+  font-size: 2.5rem;
+  color: #0d6efd;
+  margin-bottom: 1rem;
+}
+
+.map-marker i {
+  color: #dc3545;
+}
+
+/* Listas */
+.check-list li {
+  margin: 1rem 0;
+  padding-left: 1.5rem;
+  position: relative;
+}
+
+.check-list li::before {
+  content: '✔';
+  color: #0d6efd;
+  position: absolute;
+  left: 0;
+}
+
+/* Footer */
+footer {
+  background-color: #212529;
+  color: #fff;
+  padding: 1rem;
+  text-align: center;
+  margin-top: 2rem;
+  margin-top: auto;
+  width: 100%;
+}
+
+footer a {
+  transition: color 0.3s ease;
+  text-decoration: none;
+}
+
+footer a:hover {
+  color: #ffc107 !important;
+}
+
+.payment-methods {
+  max-width: 300px;
+  height: auto;
+}
+
+.newsletter-form .form-control {
+  border-radius: 25px 0 0 25px;
+}
+
+.newsletter-form .btn {
+  border-radius: 0 25px 25px 0;
+}
+
+.social-icons a {
+  transition: transform 0.3s ease;
+}
+
+.social-icons a:hover {
+  transform: translateY(-3px);
+}
+
+/* Mapa */
+.coverage-map {
+  position: relative;
+  height: 400px;
+  background: #f8f9fa;
+  border-radius: 15px;
+  margin: 2rem 0;
+  overflow: hidden;
+}
+
+.map-marker {
+  position: absolute;
+  padding: 0.5rem 1rem;
+  background: white;
+  border-radius: 25px;
+  box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+  transition: all 0.3s ease;
+}
+
+
+/* ================= */
+/* SECCIONES ESPECÍFICAS */
+/* ================= */
+
+/* Hero Section */
+.hero {
+  background: linear-gradient(rgba(0,0,0,0.7), rgba(0,0,0,0.7)), url('https://th.bing.com/th/id/R.1c7da8c716acc062242474130985d411?rik=j5Fyh3gXOx1mHw&pid=ImgRaw&r=0');
+  background-size: cover;
+  background-position: center;
+  margin-top: 56px;
+}
+
+/* About Page */
+.about-hero {
+  background: #0d6efd;
+  padding: 100px 0;
+  margin-top: 80px;
+  clip-path: polygon(0 0, 100% 0, 100% 90%, 0 100%);
+}
+
+/* FAQ Container */
+.faq-container {
+  max-width: 800px;
+  margin: 4rem auto;
+  padding: 0 1.5rem;
+}
+
+/* Políticas Container */
+.politicas-container {
+  max-width: 1200px;
+  margin: 2rem auto;
+  padding: 0 1.5rem;
+}
+
+/* Envíos Hero */
+.envios-hero {
+  background: linear-gradient(rgba(0,0,0,0.7), rgba(0,0,0,0.7)), 
+              url('../imagenes/envios-bg.jpg') center/cover;
+  height: 60vh;
+  color: white;
+  margin-bottom: 4rem;
+}
+
+
+/* ================= */
+/* ANIMACIONES */
+/* ================= */
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes slideIn {
+  from {
+    opacity: 0;
+    transform: translateX(-50px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes slide-down {
+  0% { opacity: 0; transform: translateY(-20px); }
+  100% { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+/* Animaciones globales */
+.hero h1 {
+  animation: fadeInUp 0.8s ease;
+}
+
+.hero p {
+  animation: fadeInUp 0.8s ease 0.3s;
+  animation-fill-mode: backwards;
+}
+
+.slide-in {
+  animation: slideIn 0.8s ease-out;
+}
+
+.animate-slide-down {
+  animation: slide-down 0.6s ease-out;
+}
+
+/* Animaciones para FAQ */
+.faq-item {
+  animation: fadeInUp 0.6s ease-out forwards;
+}
+
+.faq-item:nth-child(1) { animation-delay: 0.2s; }
+.faq-item:nth-child(2) { animation-delay: 0.4s; }
+.faq-item:nth-child(3) { animation-delay: 0.6s; }
+.faq-item:nth-child(4) { animation-delay: 0.8s; }
+.faq-item:nth-child(5) { animation-delay: 1.0s; }
+
+/* Animaciones para envíos */
+.option-card {
+  opacity: 0;
+  transform: translateY(20px);
+  animation: fadeInUp 0.8s ease-out forwards;
+}
+
+.option-card.standard { animation-delay: 0.2s; }
+.option-card.express { animation-delay: 0.4s; }
+.option-card.premium { animation-delay: 0.6s; }
+
+/* Animaciones para políticas */
+.politicas-grid {
+  opacity: 0;
+  animation: fadeIn 0.8s ease-out 0.3s forwards;
+}
+
+.politica-card {
+  opacity: 0;
+  transform: translateY(20px);
+  animation: fadeInUp 0.6s ease-out forwards;
+}
+
+.politica-card:nth-child(1) { animation-delay: 0.4s; }
+.politica-card:nth-child(2) { animation-delay: 0.6s; }
+.politica-card:nth-child(3) { animation-delay: 0.8s; }
+
+.politicas-titulo {
+  opacity: 0;
+  animation: slideIn 0.8s ease-out 0.2s forwards;
+}
+
+/* Accesibilidad - Reduce Motion */
+@media (prefers-reduced-motion) {
+  .faq-item,
+  .option-card,
+  .politicas-grid,
+  .politica-card,
+  .politicas-titulo,
+  .hero h1,
+  .hero p,
+  .slide-in,
+  .animate-slide-down {
+    animation: none !important;
+    opacity: 1;
+    transform: none;
+  }
+}
+
+
+/* ================= */
+/* MEDIA QUERIES */
+/* ================= */
+@media (max-width: 768px) {
+  .carousel {
+    height: 60vh !important;
+    z-index:1;
+  }
+ 
+  .carousel-item {
+    height: 50vh !important;
+    min-height: 300px;
+      }
+  
+  marquee {
+    font-size: 0.9rem;
+    padding: 6px 0;
+  }
+  
+  .navbar-nav {
+    flex-direction: column;
+    width: 100%;
+    text-align: center;
+  }
+  
+  .productos-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 1.5rem;
+    
+  }
+  
+  .faq-container {
+    margin: 2rem auto;
+  }
+  
+  .faq-titulo {
+    font-size: 2rem;
+  }
+  
+  .faq-pregunta {
+    font-size: 1rem;
+  }
+  
+  .about-grid {
+    grid-template-columns: 1fr;
+  }
+  
+  .hero-title {
+    font-size: 2.5rem;
+  }
+  
+  .options-grid {
+    grid-template-columns: 1fr;
+  }
+  
+  .coverage-map {
+    height: 300px;
+  }
+  
+  .politicas-container {
+    padding: 0 1rem;
+  }
+  
+  .politica-card {
+    padding: 1.5rem;
+  }
+
+  /* Ajustes para animaciones en móviles */
+  .faq-item {
+    animation-delay: 0s !important;
+  }
+}
+
+@media (max-width: 480px) {
+  .productos-grid {
+    grid-template-columns: 1fr;
+  }
+}
