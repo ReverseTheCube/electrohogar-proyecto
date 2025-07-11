@@ -1,0 +1,466 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Finalizar Compra - ElectroHogar</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="styles/estilos.css">
+  <link rel="stylesheet" href="styles/checkout.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+</head>
+
+<body class="d-flex flex-column min-vh-100">
+
+  <nav class="navbar navbar-expand-lg navbar-light bg-primary shadow-sm py-3">
+    <div class="container">
+      <a class="navbar-brand fw-bold text-white" href="index.html">
+        <img src="imagenes/logo.png" alt="Logo" width="80" height="80" class="me-2" />
+        ElectroHogar
+      </a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
+        aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+
+      <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
+        <ul class="navbar-nav">
+          <li class="nav-item">
+            <a class="nav-link mx-2" href="index.html">Inicio</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link mx-2" href="productos.html">Productos</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link mx-2" href="acerca.html">Acerca</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link mx-2" href="contacto.html">Contacto</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link mx-2" href="blog.html">Blog</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link mx-2" href="clientes.html">Subscribete a las noticias</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link position-relative" href="carrito.html">
+              <i class="fas fa-shopping-cart fa-lg"></i>
+              <span id="contador-carrito" class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">0</span>
+            </a>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+
+  <main class="container my-5 flex-grow-1">
+    <!-- Breadcrumb -->
+    <nav aria-label="breadcrumb" class="mb-4">
+      <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="index.html">Inicio</a></li>
+        <li class="breadcrumb-item"><a href="productos.html">Productos</a></li>
+        <li class="breadcrumb-item"><a href="carrito.html">Carrito</a></li>
+        <li class="breadcrumb-item active" aria-current="page">Checkout</li>
+      </ol>
+    </nav>
+
+    <div class="row">
+      <div class="col-12">
+        <h2 class="mb-4 text-center">
+          <i class="fas fa-credit-card me-2 text-primary"></i>Finalizar Compra
+        </h2>
+      </div>
+    </div>
+
+    <!-- Alertas del sistema -->
+    <div id="alertas-checkout"></div>
+
+    <div class="row">
+      <!-- Formulario de Checkout -->
+      <div class="col-lg-8">
+        <form id="checkout-form" class="needs-validation" novalidate>
+          
+          <!-- Información Personal -->
+          <div class="checkout-section">
+            <div class="section-header">
+              <h4><i class="fas fa-user me-2"></i>Información Personal</h4>
+            </div>
+            <div class="section-content">
+              <div class="row">
+                <div class="col-md-6 mb-3">
+                  <label for="nombre" class="form-label">Nombres *</label>
+                  <input type="text" class="form-control" id="nombre" required>
+                  <div class="invalid-feedback">
+                    Por favor ingresa tu nombre.
+                  </div>
+                </div>
+                <div class="col-md-6 mb-3">
+                  <label for="apellidos" class="form-label">Apellidos *</label>
+                  <input type="text" class="form-control" id="apellidos" required>
+                  <div class="invalid-feedback">
+                    Por favor ingresa tus apellidos.
+                  </div>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-md-6 mb-3">
+                  <label for="email" class="form-label">Correo Electrónico *</label>
+                  <input type="email" class="form-control" id="email" required>
+                  <div class="invalid-feedback">
+                    Por favor ingresa un email válido.
+                  </div>
+                </div>
+                <div class="col-md-6 mb-3">
+                  <label for="telefono" class="form-label">Teléfono *</label>
+                  <input type="tel" class="form-control" id="telefono" required>
+                  <div class="invalid-feedback">
+                    Por favor ingresa tu teléfono.
+                  </div>
+                </div>
+              </div>
+              <div class="mb-3">
+                <label for="documento" class="form-label">DNI/RUC *</label>
+                <input type="text" class="form-control" id="documento" required>
+                <div class="invalid-feedback">
+                  Por favor ingresa tu documento de identidad.
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Dirección de Envío -->
+          <div class="checkout-section">
+            <div class="section-header">
+              <h4><i class="fas fa-map-marker-alt me-2"></i>Dirección de Envío</h4>
+            </div>
+            <div class="section-content">
+              <div class="mb-3">
+                <label for="direccion" class="form-label">Dirección Completa *</label>
+                <input type="text" class="form-control" id="direccion" placeholder="Av/Jr/Calle, número, interior (opcional)" required>
+                <div class="invalid-feedback">
+                  Por favor ingresa tu dirección completa.
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-md-4 mb-3">
+                  <label for="departamento" class="form-label">Departamento *</label>
+                  <select class="form-select" id="departamento" required>
+                    <option value="">Seleccionar</option>
+                    <option value="arequipa">Arequipa</option>
+                    <option value="lima">Lima</option>
+                    <option value="cusco">Cusco</option>
+                    <option value="trujillo">Trujillo</option>
+                    <option value="chiclayo">Chiclayo</option>
+                  </select>
+                  <div class="invalid-feedback">
+                    Selecciona tu departamento.
+                  </div>
+                </div>
+                <div class="col-md-4 mb-3">
+                  <label for="provincia" class="form-label">Provincia *</label>
+                  <select class="form-select" id="provincia" required>
+                    <option value="">Seleccionar departamento primero</option>
+                  </select>
+                  <div class="invalid-feedback">
+                    Selecciona tu provincia.
+                  </div>
+                </div>
+                <div class="col-md-4 mb-3">
+                  <label for="distrito" class="form-label">Distrito *</label>
+                  <select class="form-select" id="distrito" required>
+                    <option value="">Seleccionar provincia primero</option>
+                  </select>
+                  <div class="invalid-feedback">
+                    Selecciona tu distrito.
+                  </div>
+                </div>
+              </div>
+              <div class="mb-3">
+                <label for="referencia" class="form-label">Referencia (opcional)</label>
+                <textarea class="form-control" id="referencia" rows="2" placeholder="Ej: Frente al parque, Casa color azul, etc."></textarea>
+              </div>
+            </div>
+          </div>
+
+          <!-- Método de Envío -->
+          <div class="checkout-section">
+            <div class="section-header">
+              <h4><i class="fas fa-truck me-2"></i>Método de Envío</h4>
+            </div>
+            <div class="section-content">
+              <div class="shipping-options">
+                <div class="form-check shipping-option">
+                  <input class="form-check-input" type="radio" name="metodo-envio" id="envio-estandar" value="estandar" data-precio="0" checked>
+                  <label class="form-check-label" for="envio-estandar">
+                    <div class="option-info">
+                      <strong>Envío Estándar</strong> <span class="badge bg-success ms-2">GRATIS</span>
+                      <br><small class="text-muted">3-5 días hábiles</small>
+                    </div>
+                  </label>
+                </div>
+                <div class="form-check shipping-option">
+                  <input class="form-check-input" type="radio" name="metodo-envio" id="envio-express" value="express" data-precio="15">
+                  <label class="form-check-label" for="envio-express">
+                    <div class="option-info">
+                      <strong>Envío Express</strong> <span class="text-warning">+S/ 15.00</span>
+                      <br><small class="text-muted">24-48 horas</small>
+                    </div>
+                  </label>
+                </div>
+                <div class="form-check shipping-option">
+                  <input class="form-check-input" type="radio" name="metodo-envio" id="envio-premium" value="premium" data-precio="25">
+                  <label class="form-check-label" for="envio-premium">
+                    <div class="option-info">
+                      <strong>Envío Premium</strong> <span class="text-danger">+S/ 25.00</span>
+                      <br><small class="text-muted">Mismo día (Lima)</small>
+                    </div>
+                  </label>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Método de Pago -->
+          <div class="checkout-section">
+            <div class="section-header">
+              <h4><i class="fas fa-credit-card me-2"></i>Método de Pago</h4>
+            </div>
+            <div class="section-content">
+              <div class="payment-methods">
+                <div class="form-check payment-option">
+                  <input class="form-check-input" type="radio" name="metodo-pago" id="pago-tarjeta" value="tarjeta" checked>
+                  <label class="form-check-label" for="pago-tarjeta">
+                    <i class="fas fa-credit-card me-2"></i>Tarjeta de Crédito/Débito
+                  </label>
+                </div>
+                <div class="form-check payment-option">
+                  <input class="form-check-input" type="radio" name="metodo-pago" id="pago-yape" value="yape">
+                  <label class="form-check-label" for="pago-yape">
+                    <i class="fas fa-mobile-alt me-2"></i>Yape / Plin
+                  </label>
+                </div>
+                <div class="form-check payment-option">
+                  <input class="form-check-input" type="radio" name="metodo-pago" id="pago-transferencia" value="transferencia">
+                  <label class="form-check-label" for="pago-transferencia">
+                    <i class="fas fa-university me-2"></i>Transferencia Bancaria
+                  </label>
+                </div>
+                <div class="form-check payment-option">
+                  <input class="form-check-input" type="radio" name="metodo-pago" id="pago-contraentrega" value="contraentrega">
+                  <label class="form-check-label" for="pago-contraentrega">
+                    <i class="fas fa-money-bill-wave me-2"></i>Pago Contra Entrega
+                  </label>
+                </div>
+              </div>
+
+              <!-- Formulario de Tarjeta (se muestra/oculta según selección) -->
+              <div id="datos-tarjeta" class="card-form mt-3">
+                <div class="row">
+                  <div class="col-12 mb-3">
+                    <label for="numero-tarjeta" class="form-label">Número de Tarjeta</label>
+                    <input type="text" class="form-control" id="numero-tarjeta" placeholder="1234 5678 9012 3456" maxlength="19">
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col-md-8 mb-3">
+                    <label for="nombre-tarjeta" class="form-label">Nombre en la Tarjeta</label>
+                    <input type="text" class="form-control" id="nombre-tarjeta" placeholder="Como aparece en la tarjeta">
+                  </div>
+                  <div class="col-md-4 mb-3">
+                    <label for="cvv" class="form-label">CVV</label>
+                    <input type="text" class="form-control" id="cvv" placeholder="123" maxlength="4">
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col-md-6 mb-3">
+                    <label for="mes-vencimiento" class="form-label">Mes de Vencimiento</label>
+                    <select class="form-select" id="mes-vencimiento">
+                      <option value="">Mes</option>
+                      <option value="01">01</option>
+                      <option value="02">02</option>
+                      <option value="03">03</option>
+                      <option value="04">04</option>
+                      <option value="05">05</option>
+                      <option value="06">06</option>
+                      <option value="07">07</option>
+                      <option value="08">08</option>
+                      <option value="09">09</option>
+                      <option value="10">10</option>
+                      <option value="11">11</option>
+                      <option value="12">12</option>
+                    </select>
+                  </div>
+                  <div class="col-md-6 mb-3">
+                    <label for="año-vencimiento" class="form-label">Año de Vencimiento</label>
+                    <select class="form-select" id="año-vencimiento">
+                      <option value="">Año</option>
+                      <option value="2025">2025</option>
+                      <option value="2026">2026</option>
+                      <option value="2027">2027</option>
+                      <option value="2028">2028</option>
+                      <option value="2029">2029</option>
+                      <option value="2030">2030</option>
+                    </select>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Términos y Condiciones -->
+          <div class="checkout-section">
+            <div class="section-content">
+              <div class="form-check">
+                <input class="form-check-input" type="checkbox" value="" id="terminos" required>
+                <label class="form-check-label" for="terminos">
+                  Acepto los <a href="politicas.html" target="_blank">términos y condiciones</a> y la <a href="politicas.html" target="_blank">política de privacidad</a> *
+                </label>
+                <div class="invalid-feedback">
+                  Debes aceptar los términos y condiciones.
+                </div>
+              </div>
+            </div>
+          </div>
+
+        </form>
+      </div>
+
+      <!-- Resumen del Pedido -->
+      <div class="col-lg-4">
+        <div class="order-summary">
+          <h4 class="mb-3"><i class="fas fa-shopping-bag me-2"></i>Resumen del Pedido</h4>
+          
+          <!-- Productos -->
+          <div id="productos-resumen" class="products-summary mb-3">
+            <!-- Se llena dinámicamente -->
+          </div>
+
+          <!-- Cupón de Descuento -->
+          <div class="coupon-section mb-3">
+            <div class="input-group">
+              <input type="text" class="form-control" id="cupon-descuento" placeholder="Código de cupón">
+              <button class="btn btn-outline-secondary" type="button" id="aplicar-cupon">Aplicar</button>
+            </div>
+          </div>
+
+          <!-- Cálculos -->
+          <div class="order-calculations">
+            <div class="d-flex justify-content-between mb-2">
+              <span>Subtotal:</span>
+              <span id="subtotal-resumen">S/ 0.00</span>
+            </div>
+            <div class="d-flex justify-content-between mb-2" id="descuento-cantidad-line" style="display: none !important;">
+              <span>Descuento por cantidad:</span>
+              <span class="text-success" id="descuento-cantidad">-S/ 0.00</span>
+            </div>
+            <div class="d-flex justify-content-between mb-2" id="descuento-cupon-line" style="display: none !important;">
+              <span>Descuento cupón:</span>
+              <span class="text-success" id="descuento-cupon">-S/ 0.00</span>
+            </div>
+            <div class="d-flex justify-content-between mb-2">
+              <span>Envío:</span>
+              <span id="costo-envio">Gratis</span>
+            </div>
+            <div class="d-flex justify-content-between mb-2">
+              <span>IGV (18%):</span>
+              <span id="igv-resumen">S/ 0.00</span>
+            </div>
+            <hr>
+            <div class="d-flex justify-content-between mb-3">
+              <strong>Total:</strong>
+              <strong class="text-primary" id="total-resumen">S/ 0.00</strong>
+            </div>
+          </div>
+
+          <!-- Botón Finalizar -->
+          <button type="submit" form="checkout-form" class="btn btn-success btn-lg w-100" id="btn-finalizar">
+            <i class="fas fa-lock me-2"></i>Finalizar Compra Segura
+          </button>
+
+          <!-- Seguridad -->
+          <div class="security-badges mt-3 text-center">
+            <small class="text-muted">
+              <i class="fas fa-shield-alt me-1"></i>Compra 100% segura
+              <br><i class="fas fa-lock me-1"></i>Datos protegidos SSL
+            </small>
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <footer class="bg-dark text-white pt-5">
+    <div class="container">
+      <div class="row g-4">
+        <!-- Columna 1: Contacto -->
+        <div class="col-md-4">
+          <h5 class="text-warning mb-3">Contacto</h5>
+          <ul class="list-unstyled">
+            <li class="mb-2">
+              <i class="fas fa-map-marker-alt me-2"></i>
+              Av. Ampatacocha 301, Arequipa, Perú
+            </li>
+            <li class="mb-2">
+              <i class="fas fa-phone me-2"></i>
+              <a href="tel:+51987654321" class="text-white">+51 987 654 321</a>
+            </li>
+            <li>
+              <i class="fas fa-envelope me-2"></i>
+              <a href="mailto:info@electrohogar.com" class="text-white">info@electrohogar.com</a>
+            </li>
+          </ul>
+        </div>
+
+        <!-- Columna 2: Enlaces Rápidos -->
+        <div class="col-md-4">
+          <h5 class="text-warning mb-3">Enlaces Rápidos</h5>
+          <ul class="list-unstyled">
+            <li class="mb-2"><a href="productos.html" class="text-white">Productos Destacados</a></li>
+            <li class="mb-2"><a href="politicas.html" class="text-white">Política de Garantías</a></li>
+            <li class="mb-2"><a href="envios.html" class="text-white">Envíos y Devoluciones</a></li>
+            <li><a href="faq.html" class="text-white">Preguntas Frecuentes</a></li>
+          </ul>
+        </div>
+
+        <!-- Columna 3: Redes Sociales y Newsletter -->
+        <div class="col-md-4">
+          <h5 class="text-warning mb-3">Síguenos</h5>
+          <div class="social-icons mb-4">
+            <a href="https://www.facebook.com/" class="text-white me-3"><i class="fab fa-facebook fa-2x"></i></a>
+            <a href="https://www.instagram.com/" class="text-white me-3"><i class="fab fa-instagram fa-2x"></i></a>
+            <a href="https://www.tiktok.com/" class="text-white"><i class="fab fa-tiktok fa-2x"></i></a>
+          </div>
+          
+          <h5 class="text-warning mb-3">Newsletter</h5>
+          <form class="newsletter-form">
+            <div class="input-group">
+              <input type="email" class="form-control" placeholder="Tu correo electrónico">
+              <button class="btn btn-warning" type="button">
+                <i class="fas fa-paper-plane"></i>
+              </button>
+            </div>
+          </form>
+        </div>
+      </div>
+
+      <!-- Línea Separadora -->
+      <hr class="my-4">
+
+      <!-- Copyright y Métodos de Pago -->
+      <div class="row">
+        <div class="col-md-6 text-center text-md-start">
+          <p class="mb-0">&copy; 2025 ElectroHogar. Todos los derechos reservados.</p>
+        </div>
+        <div class="col-md-6 text-center text-md-end">
+          <img src="https://beautyaddicts.pe/cdn/shop/files/Medios-de-pago_ee0cb69a-3d11-462d-b6a2-712657473a65.svg?v=1716854670&width=1584" alt="Métodos de pago" class="img-fluid payment-methods">
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+  <script type="module" src="js/modules/checkoutModule.js"></script>
+</body>
+</html>

@@ -1,0 +1,474 @@
+/* ==================== CHECKOUT STYLES - ELECTROHOGAR ==================== */
+
+/* Variables específicas para checkout */
+:root {
+  --checkout-primary: #007bff;
+  --checkout-success: #28a745;
+  --checkout-warning: #ffc107;
+  --checkout-danger: #dc3545;
+  --checkout-border: #e9ecef;
+  --checkout-shadow: 0 4px 15px rgba(0,0,0,0.1);
+  --checkout-radius: 12px;
+  --checkout-transition: all 0.3s ease;
+}
+
+/* ==================== LAYOUT PRINCIPAL ==================== */
+.checkout-container {
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+/* ==================== BREADCRUMB ==================== */
+.breadcrumb {
+  background: #f8f9fa;
+  padding: 1rem;
+  border-radius: var(--checkout-radius);
+  box-shadow: var(--checkout-shadow);
+}
+
+.breadcrumb-item a {
+  color: var(--checkout-primary);
+  text-decoration: none;
+}
+
+.breadcrumb-item a:hover {
+  text-decoration: underline;
+}
+
+/* ==================== SECCIONES DEL CHECKOUT ==================== */
+.checkout-section {
+  background: white;
+  border-radius: var(--checkout-radius);
+  box-shadow: var(--checkout-shadow);
+  margin-bottom: 2rem;
+  border: 1px solid var(--checkout-border);
+  overflow: hidden;
+  transition: var(--checkout-transition);
+}
+
+.checkout-section:hover {
+  box-shadow: 0 6px 20px rgba(0,0,0,0.15);
+}
+
+.section-header {
+  background: linear-gradient(135deg, var(--checkout-primary), #0056b3);
+  color: white;
+  padding: 1rem 1.5rem;
+  border-bottom: 1px solid var(--checkout-border);
+}
+
+.section-header h4 {
+  margin: 0;
+  font-weight: 600;
+  font-size: 1.1rem;
+}
+
+.section-content {
+  padding: 1.5rem;
+}
+
+/* ==================== FORMULARIOS ==================== */
+.form-control:focus {
+  border-color: var(--checkout-primary);
+  box-shadow: 0 0 0 0.25rem rgba(0, 123, 255, 0.25);
+}
+
+.form-select:focus {
+  border-color: var(--checkout-primary);
+  box-shadow: 0 0 0 0.25rem rgba(0, 123, 255, 0.25);
+}
+
+.invalid-feedback {
+  display: block;
+  width: 100%;
+  margin-top: 0.25rem;
+  font-size: 0.875rem;
+  color: var(--checkout-danger);
+}
+
+.was-validated .form-control:invalid,
+.was-validated .form-select:invalid {
+  border-color: var(--checkout-danger);
+}
+
+.was-validated .form-control:valid,
+.was-validated .form-select:valid {
+  border-color: var(--checkout-success);
+}
+
+/* ==================== OPCIONES DE ENVÍO ==================== */
+.shipping-options {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.shipping-option {
+  border: 2px solid var(--checkout-border);
+  border-radius: var(--checkout-radius);
+  padding: 1rem;
+  transition: var(--checkout-transition);
+  cursor: pointer;
+}
+
+.shipping-option:hover {
+  border-color: var(--checkout-primary);
+  background-color: rgba(0, 123, 255, 0.05);
+}
+
+.shipping-option input[type="radio"]:checked + label {
+  color: var(--checkout-primary);
+  font-weight: 600;
+}
+
+.shipping-option input[type="radio"]:checked {
+  background-color: var(--checkout-primary);
+  border-color: var(--checkout-primary);
+}
+
+.shipping-option:has(input:checked) {
+  border-color: var(--checkout-primary);
+  background-color: rgba(0, 123, 255, 0.1);
+}
+
+.option-info {
+  margin-left: 0.5rem;
+}
+
+/* ==================== OPCIONES DE PAGO ==================== */
+.payment-methods {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.payment-option {
+  border: 2px solid var(--checkout-border);
+  border-radius: var(--checkout-radius);
+  padding: 1rem;
+  transition: var(--checkout-transition);
+  cursor: pointer;
+}
+
+.payment-option:hover {
+  border-color: var(--checkout-primary);
+  background-color: rgba(0, 123, 255, 0.05);
+}
+
+.payment-option input[type="radio"]:checked + label {
+  color: var(--checkout-primary);
+  font-weight: 600;
+}
+
+.payment-option:has(input:checked) {
+  border-color: var(--checkout-primary);
+  background-color: rgba(0, 123, 255, 0.1);
+}
+
+/* ==================== FORMULARIO DE TARJETA ==================== */
+.card-form {
+  background: #f8f9fa;
+  padding: 1.5rem;
+  border-radius: var(--checkout-radius);
+  border: 1px solid var(--checkout-border);
+  display: none;
+  animation: slideDown 0.3s ease;
+}
+
+.card-form.show {
+  display: block;
+}
+
+@keyframes slideDown {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* ==================== RESUMEN DEL PEDIDO ==================== */
+.order-summary {
+  background: white;
+  border-radius: var(--checkout-radius);
+  box-shadow: var(--checkout-shadow);
+  padding: 1.5rem;
+  border: 1px solid var(--checkout-border);
+  position: sticky;
+  top: 2rem;
+}
+
+.order-summary h4 {
+  color: var(--checkout-primary);
+  border-bottom: 2px solid var(--checkout-border);
+  padding-bottom: 0.5rem;
+}
+
+/* ==================== PRODUCTOS EN RESUMEN ==================== */
+.products-summary {
+  max-height: 300px;
+  overflow-y: auto;
+}
+
+.product-item-checkout {
+  display: flex;
+  align-items: center;
+  padding: 0.75rem 0;
+  border-bottom: 1px solid #f1f1f1;
+}
+
+.product-item-checkout:last-child {
+  border-bottom: none;
+}
+
+.product-image-small {
+  width: 50px;
+  height: 50px;
+  object-fit: cover;
+  border-radius: 8px;
+  margin-right: 1rem;
+}
+
+.product-details {
+  flex: 1;
+}
+
+.product-name {
+  font-weight: 600;
+  font-size: 0.9rem;
+  margin-bottom: 0.25rem;
+}
+
+.product-quantity {
+  font-size: 0.8rem;
+  color: #6c757d;
+}
+
+.product-price {
+  font-weight: 600;
+  color: var(--checkout-success);
+}
+
+/* ==================== CUPÓN DE DESCUENTO ==================== */
+.coupon-section {
+  background: #f8f9fa;
+  padding: 1rem;
+  border-radius: var(--checkout-radius);
+  border: 1px dashed var(--checkout-border);
+}
+
+.coupon-section .input-group {
+  box-shadow: none;
+}
+
+.coupon-section .form-control {
+  border-right: none;
+}
+
+.coupon-section .btn {
+  border-left: none;
+}
+
+/* ==================== CÁLCULOS DEL PEDIDO ==================== */
+.order-calculations {
+  font-size: 0.95rem;
+}
+
+.order-calculations .d-flex {
+  margin-bottom: 0.5rem;
+}
+
+.order-calculations hr {
+  margin: 1rem 0;
+  border-color: var(--checkout-border);
+}
+
+.order-calculations strong {
+  font-size: 1.1rem;
+}
+
+/* ==================== BOTÓN FINALIZAR ==================== */
+#btn-finalizar {
+  background: linear-gradient(135deg, var(--checkout-success), #1e7e34);
+  border: none;
+  font-weight: 600;
+  font-size: 1.1rem;
+  padding: 1rem;
+  border-radius: var(--checkout-radius);
+  transition: var(--checkout-transition);
+  box-shadow: var(--checkout-shadow);
+}
+
+#btn-finalizar:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(40, 167, 69, 0.3);
+}
+
+#btn-finalizar:disabled {
+  background: #6c757d;
+  cursor: not-allowed;
+  transform: none;
+}
+
+/* ==================== BADGES DE SEGURIDAD ==================== */
+.security-badges {
+  background: #f8f9fa;
+  padding: 1rem;
+  border-radius: var(--checkout-radius);
+  border: 1px solid var(--checkout-border);
+}
+
+.security-badges i {
+  color: var(--checkout-success);
+}
+
+/* ==================== ALERTAS DEL CHECKOUT ==================== */
+.alert-checkout {
+  border-radius: var(--checkout-radius);
+  border: none;
+  box-shadow: var(--checkout-shadow);
+  animation: slideDown 0.5s ease;
+  margin-bottom: 1rem;
+}
+
+/* ==================== RESPONSIVE ==================== */
+@media (max-width: 992px) {
+  .order-summary {
+    position: relative;
+    top: 0;
+    margin-top: 2rem;
+  }
+}
+
+@media (max-width: 768px) {
+  .section-content {
+    padding: 1rem;
+  }
+  
+  .checkout-section {
+    margin-bottom: 1rem;
+  }
+  
+  .order-summary {
+    padding: 1rem;
+  }
+  
+  .shipping-options,
+  .payment-methods {
+    gap: 0.5rem;
+  }
+  
+  .shipping-option,
+  .payment-option {
+    padding: 0.75rem;
+  }
+}
+
+@media (max-width: 576px) {
+  .section-header {
+    padding: 0.75rem 1rem;
+  }
+  
+  .section-header h4 {
+    font-size: 1rem;
+  }
+  
+  .breadcrumb {
+    padding: 0.75rem;
+  }
+  
+  #btn-finalizar {
+    font-size: 1rem;
+    padding: 0.875rem;
+  }
+}
+
+/* ==================== ANIMACIONES ==================== */
+.fade-in {
+  animation: fadeIn 0.5s ease;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.slide-in {
+  animation: slideIn 0.3s ease;
+}
+
+@keyframes slideIn {
+  from {
+    opacity: 0;
+    transform: translateX(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+/* ==================== ESTADOS ESPECIALES ==================== */
+.loading {
+  pointer-events: none;
+  opacity: 0.7;
+  position: relative;
+}
+
+.loading::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(255, 255, 255, 0.8);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.loading::before {
+  content: '\f110';
+  font-family: 'Font Awesome 6 Free';
+  font-weight: 900;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 1000;
+  font-size: 2rem;
+  color: var(--checkout-primary);
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  0% { transform: translate(-50%, -50%) rotate(0deg); }
+  100% { transform: translate(-50%, -50%) rotate(360deg); }
+}
+
+/* ==================== UTILIDADES ==================== */
+.text-success {
+  color: var(--checkout-success) !important;
+}
+
+.text-primary {
+  color: var(--checkout-primary) !important;
+}
+
+.text-danger {
+  color: var(--checkout-danger) !important;
+}
+
+.text-warning {
+  color: var(--checkout-warning) !important;
+}
