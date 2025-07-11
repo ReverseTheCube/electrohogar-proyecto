@@ -1,7 +1,7 @@
 # 🏪 ElectroHogar - Tienda Electrónica
 
 ## 🌐 Demo en Vivo
-**URL del Proyecto**: https://reversethecube.github.io/ProyectoElectroHogar
+**URL del Proyecto**: https://reversethecube.github.io/electrohogar-proyecto/
 
 ## 👥 Integrantes del Grupo
 - [Tu nombre] - [Tu código de estudiante]
