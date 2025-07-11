@@ -1,0 +1,499 @@
+/* ==================== CONFIRMACION STYLES - ELECTROHOGAR ==================== */
+
+/* Variables específicas para confirmación */
+:root {
+  --confirmacion-primary: #007bff;
+  --confirmacion-success: #28a745;
+  --confirmacion-warning: #ffc107;
+  --confirmacion-danger: #dc3545;
+  --confirmacion-info: #17a2b8;
+  --confirmacion-light: #f8f9fa;
+  --confirmacion-dark: #343a40;
+  --confirmacion-border: #e9ecef;
+  --confirmacion-shadow: 0 4px 15px rgba(0,0,0,0.1);
+  --confirmacion-shadow-hover: 0 6px 20px rgba(0,0,0,0.15);
+  --confirmacion-radius: 12px;
+  --confirmacion-transition: all 0.3s ease;
+}
+
+/* ==================== LAYOUT GENERAL ==================== */
+body {
+  background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  line-height: 1.6;
+}
+
+.container {
+  max-width: 1200px;
+}
+
+/* ==================== HEADER DE CONFIRMACIÓN ==================== */
+header {
+  background: linear-gradient(135deg, var(--confirmacion-primary), #0056b3) !important;
+  box-shadow: var(--confirmacion-shadow);
+}
+
+header .badge {
+  font-size: 0.9rem;
+  padding: 0.5rem 1rem;
+  border-radius: 25px;
+}
+
+/* ==================== TARJETA DE CONFIRMACIÓN PRINCIPAL ==================== */
+.confirmation-card {
+  background: white;
+  border-radius: var(--confirmacion-radius);
+  padding: 3rem 2rem;
+  box-shadow: var(--confirmacion-shadow);
+  border: 1px solid var(--confirmacion-border);
+  transition: var(--confirmacion-transition);
+  position: relative;
+  overflow: hidden;
+}
+
+.confirmation-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 4px;
+  background: linear-gradient(90deg, var(--confirmacion-success), var(--confirmacion-primary));
+}
+
+.confirmation-card:hover {
+  box-shadow: var(--confirmacion-shadow-hover);
+  transform: translateY(-2px);
+}
+
+/* ==================== ICONO DE ÉXITO ==================== */
+.success-icon {
+  font-size: 4rem;
+  color: var(--confirmacion-success);
+  margin-bottom: 1.5rem;
+  animation: successPulse 2s ease-in-out infinite;
+}
+
+@keyframes successPulse {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.05); }
+  100% { transform: scale(1); }
+}
+
+/* ==================== INFORMACIÓN DEL PEDIDO ==================== */
+.order-info {
+  background: linear-gradient(135deg, var(--confirmacion-light), #ffffff);
+  border-radius: 8px;
+  padding: 1.5rem;
+  margin-top: 2rem;
+  border: 1px solid var(--confirmacion-border);
+}
+
+.info-item {
+  margin-bottom: 0.5rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.info-item strong {
+  color: var(--confirmacion-dark);
+  font-weight: 600;
+}
+
+#numero-pedido {
+  font-family: 'Courier New', monospace;
+  font-weight: bold;
+  font-size: 1.1rem;
+}
+
+/* ==================== SECCIONES DE CONTENIDO ==================== */
+.section-card {
+  background: white;
+  border-radius: var(--confirmacion-radius);
+  box-shadow: var(--confirmacion-shadow);
+  overflow: hidden;
+  border: 1px solid var(--confirmacion-border);
+  transition: var(--confirmacion-transition);
+}
+
+.section-card:hover {
+  box-shadow: var(--confirmacion-shadow-hover);
+}
+
+.section-header {
+  background: linear-gradient(135deg, var(--confirmacion-primary), #0056b3);
+  color: white;
+  padding: 1rem 1.5rem;
+  margin: 0;
+  position: relative;
+}
+
+.section-header::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: linear-gradient(90deg, rgba(255,255,255,0.3), rgba(255,255,255,0.1));
+}
+
+.section-header h4 {
+  margin: 0;
+  font-size: 1.1rem;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+}
+
+.section-content {
+  padding: 1.5rem;
+}
+
+/* ==================== MÉTODO DE PAGO ==================== */
+.payment-method-card {
+  background: linear-gradient(135deg, var(--confirmacion-light), #ffffff);
+  border-radius: 8px;
+  padding: 1.5rem;
+  border-left: 4px solid var(--confirmacion-primary);
+  transition: var(--confirmacion-transition);
+}
+
+.payment-method-card:hover {
+  transform: translateX(3px);
+  box-shadow: var(--confirmacion-shadow);
+}
+
+.payment-instructions {
+  background: #e7f3ff;
+  border-radius: 8px;
+  padding: 1rem;
+  margin-top: 1rem;
+  border: 1px solid #b8daff;
+}
+
+.payment-instructions h6 {
+  color: var(--confirmacion-primary);
+  font-weight: 600;
+  margin-bottom: 0.75rem;
+}
+
+.payment-instructions ol li {
+  margin-bottom: 0.5rem;
+}
+
+.payment-instructions strong {
+  color: var(--confirmacion-dark);
+}
+
+/* ==================== QR PLACEHOLDER ==================== */
+.qr-placeholder {
+  width: 150px;
+  height: 150px;
+  background: var(--confirmacion-light);
+  border: 2px dashed var(--confirmacion-border);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  border-radius: 8px;
+  margin: 1rem auto;
+  transition: var(--confirmacion-transition);
+}
+
+.qr-placeholder:hover {
+  border-color: var(--confirmacion-primary);
+  background: #f0f8ff;
+}
+
+/* ==================== TABLA DE PRODUCTOS ==================== */
+.table {
+  margin-bottom: 0;
+}
+
+.table th {
+  border-top: none;
+  background: var(--confirmacion-light);
+  font-weight: 600;
+  color: var(--confirmacion-dark);
+  font-size: 0.9rem;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.table td {
+  vertical-align: middle;
+  border-color: #f1f3f4;
+}
+
+.table-hover tbody tr:hover {
+  background-color: rgba(0, 123, 255, 0.05);
+}
+
+.table img {
+  border: 1px solid var(--confirmacion-border);
+  transition: var(--confirmacion-transition);
+}
+
+.table img:hover {
+  transform: scale(1.1);
+  box-shadow: var(--confirmacion-shadow);
+}
+
+/* ==================== TOTALES ==================== */
+.order-totals {
+  background: var(--confirmacion-light);
+  border-radius: 8px;
+  padding: 1rem;
+  border: 1px solid var(--confirmacion-border);
+}
+
+.total-line {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 0.5rem;
+  padding: 0.25rem 0;
+  font-size: 0.95rem;
+}
+
+.total-final {
+  border-top: 2px solid var(--confirmacion-primary);
+  margin-top: 1rem;
+  padding-top: 0.75rem;
+  font-size: 1.1rem;
+  background: white;
+  border-radius: 4px;
+  padding: 0.75rem;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+}
+
+/* ==================== SIMULADOR DE EMAIL ==================== */
+.email-simulator {
+  border: 2px dashed var(--confirmacion-border);
+  border-radius: 8px;
+  padding: 1.5rem;
+  background: var(--confirmacion-light);
+  font-family: 'Courier New', monospace;
+  font-size: 0.9rem;
+  line-height: 1.5;
+  max-height: 500px;
+  overflow-y: auto;
+  transition: var(--confirmacion-transition);
+}
+
+.email-simulator:hover {
+  border-color: var(--confirmacion-primary);
+  background: #f8f9fa;
+}
+
+.email-header {
+  border-bottom: 1px solid var(--confirmacion-border);
+  padding-bottom: 0.5rem;
+  margin-bottom: 1rem;
+}
+
+.email-header h5 {
+  color: var(--confirmacion-primary);
+  font-family: 'Segoe UI', sans-serif;
+  margin-bottom: 0.5rem;
+}
+
+.email-body {
+  color: var(--confirmacion-dark);
+}
+
+.email-body h6 {
+  color: var(--confirmacion-primary);
+  font-family: 'Segoe UI', sans-serif;
+  margin-top: 1rem;
+  margin-bottom: 0.5rem;
+}
+
+.email-body ul {
+  margin-left: 1rem;
+  margin-bottom: 1rem;
+}
+
+.email-body ul li {
+  margin-bottom: 0.25rem;
+}
+
+/* ==================== ALERTAS PERSONALIZADAS ==================== */
+.alert {
+  border: none;
+  border-radius: 8px;
+  border-left: 4px solid;
+  font-size: 0.9rem;
+}
+
+.alert-info {
+  background: #e7f3ff;
+  border-left-color: var(--confirmacion-info);
+  color: #0c5460;
+}
+
+.alert-warning {
+  background: #fff3cd;
+  border-left-color: var(--confirmacion-warning);
+  color: #856404;
+}
+
+.alert-success {
+  background: #d4edda;
+  border-left-color: var(--confirmacion-success);
+  color: #155724;
+}
+
+/* ==================== BOTONES ==================== */
+.btn-lg {
+  padding: 12px 30px;
+  font-size: 1.1rem;
+  border-radius: 8px;
+  transition: var(--confirmacion-transition);
+  font-weight: 500;
+}
+
+.btn-primary {
+  background: linear-gradient(135deg, var(--confirmacion-primary), #0056b3);
+  border: none;
+  box-shadow: 0 4px 12px rgba(0, 123, 255, 0.3);
+}
+
+.btn-primary:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 16px rgba(0, 123, 255, 0.4);
+}
+
+.btn-outline-primary {
+  border: 2px solid var(--confirmacion-primary);
+  color: var(--confirmacion-primary);
+  background: transparent;
+}
+
+.btn-outline-primary:hover {
+  background: var(--confirmacion-primary);
+  border-color: var(--confirmacion-primary);
+  transform: translateY(-2px);
+}
+
+/* ==================== FOOTER ==================== */
+footer {
+  background: linear-gradient(135deg, var(--confirmacion-dark), #212529) !important;
+  margin-top: 3rem;
+}
+
+footer .social-icons a {
+  transition: var(--confirmacion-transition);
+}
+
+footer .social-icons a:hover {
+  transform: translateY(-3px);
+  color: var(--confirmacion-warning) !important;
+}
+
+/* ==================== RESPONSIVE ==================== */
+@media (max-width: 768px) {
+  .confirmation-card {
+    padding: 2rem 1rem;
+    margin: 1rem 0;
+  }
+  
+  .success-icon {
+    font-size: 3rem;
+  }
+  
+  .order-info .row .col-md-6 {
+    margin-bottom: 1rem;
+  }
+  
+  .section-content {
+    padding: 1rem;
+  }
+  
+  .payment-method-card {
+    padding: 1rem;
+  }
+  
+  .btn-lg {
+    width: 100%;
+    margin-bottom: 1rem;
+  }
+  
+  .email-simulator {
+    font-size: 0.8rem;
+    padding: 1rem;
+  }
+  
+  .table-responsive {
+    font-size: 0.9rem;
+  }
+  
+  .total-line {
+    font-size: 0.9rem;
+  }
+}
+
+@media (max-width: 576px) {
+  .confirmation-card {
+    margin: 0.5rem;
+  }
+  
+  .success-icon {
+    font-size: 2.5rem;
+  }
+  
+  .section-header h4 {
+    font-size: 1rem;
+  }
+  
+  .qr-placeholder {
+    width: 120px;
+    height: 120px;
+  }
+  
+  .order-info {
+    padding: 1rem;
+  }
+}
+
+/* ==================== ANIMACIONES ADICIONALES ==================== */
+@keyframes slideInUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.section-card {
+  animation: slideInUp 0.6s ease-out;
+}
+
+.section-card:nth-child(2) { animation-delay: 0.1s; }
+.section-card:nth-child(3) { animation-delay: 0.2s; }
+.section-card:nth-child(4) { animation-delay: 0.3s; }
+.section-card:nth-child(5) { animation-delay: 0.4s; }
+
+/* ==================== SCROLL BAR PERSONALIZADA ==================== */
+.email-simulator::-webkit-scrollbar {
+  width: 8px;
+}
+
+.email-simulator::-webkit-scrollbar-track {
+  background: #f1f1f1;
+  border-radius: 4px;
+}
+
+.email-simulator::-webkit-scrollbar-thumb {
+  background: var(--confirmacion-primary);
+  border-radius: 4px;
+}
+
+.email-simulator::-webkit-scrollbar-thumb:hover {
+  background: #0056b3;
+}
