@@ -1,4 +1,3 @@
-
 // ==================== DECLARACIÓN DE VARIABLES Y ESTRUCTURAS DE DATOS ====================
 
 // CONSTANTES - Datos del sistema
@@ -13,7 +12,7 @@ const TIPOS_USUARIO = ['admin', 'gerente', 'empleado', 'cliente'];
 const MAX_INTENTOS_LOGIN = 3;
 const TIEMPO_BLOQUEO = 30000; // 30 segundos
 
-// ARREGLOS BIDIMENSIONALES - Base de datos de usuarios
+// ARREGLOS BIDIMENSIONALES - Base de datos de usuarios predefinidos
 const USUARIOS_DB = [
     ['admin', '123', 'Administrador General', 'admin@electrohogar.com', 'admin'],
     ['gerente', '456', 'Gerente General', 'gerente@electrohogar.com', 'gerente'],
@@ -53,6 +52,7 @@ document.addEventListener('DOMContentLoaded', function() {
     window.toggleTheme = toggleTheme;
     window.togglePassword = togglePassword;
     window.mostrarRecuperarPassword = mostrarRecuperarPassword;
+    window.mostrarRegistro = mostrarRegistro; // ✅ NUEVA FUNCIÓN
     
     console.log('✅ Sistema inicializado correctamente');
 });
@@ -153,6 +153,236 @@ function configurarEventos() {
     console.log('⚙️ Eventos configurados');
 }
 
+// ==================== SISTEMA DE REGISTRO ==================== ✅ NUEVO
+
+function mostrarRegistro() {
+    console.log('📝 Mostrando formulario de registro...');
+    
+    const registroHTML = `
+        <div class="registro-container">
+            <div class="text-center mb-4">
+                <i class="fas fa-user-plus fa-3x text-success mb-3"></i>
+                <h4 class="text-success">Crear Cuenta Nueva</h4>
+                <p class="text-muted">Únete a ElectroHogar y disfruta de nuestros productos</p>
+            </div>
+            
+            <form id="registroForm" onsubmit="procesarRegistro(event)">
+                <div class="row">
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label">Nombre Completo *</label>
+                        <input type="text" class="form-control" id="regNombre" required 
+                               placeholder="Ej: Juan Pérez">
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label">Email *</label>
+                        <input type="email" class="form-control" id="regEmail" required 
+                               placeholder="ejemplo@correo.com">
+                    </div>
+                </div>
+                
+                <div class="row">
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label">Usuario *</label>
+                        <input type="text" class="form-control" id="regUsuario" required 
+                               placeholder="Nombre de usuario" minlength="3">
+                        <small class="text-muted">Mínimo 3 caracteres</small>
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label">Contraseña *</label>
+                        <input type="password" class="form-control" id="regPassword" required 
+                               placeholder="Contraseña segura" minlength="3">
+                        <small class="text-muted">Mínimo 3 caracteres</small>
+                    </div>
+                </div>
+                
+                <div class="mb-3">
+                    <label class="form-label">Teléfono (opcional)</label>
+                    <input type="tel" class="form-control" id="regTelefono" 
+                           placeholder="Ej: 987654321">
+                </div>
+                
+                <div class="form-check mb-3">
+                    <input class="form-check-input" type="checkbox" id="regTerminos" required>
+                    <label class="form-check-label" for="regTerminos">
+                        Acepto los <a href="politicas.html" target="_blank">términos y condiciones</a> *
+                    </label>
+                </div>
+                
+                <div id="registroAlerta"></div>
+                
+                <button type="submit" class="btn btn-success w-100" id="btnRegistro">
+                    <i class="fas fa-user-check me-2"></i>
+                    <span id="registroTexto">Crear Cuenta</span>
+                </button>
+            </form>
+        </div>
+    `;
+    
+    // Configurar modal
+    document.getElementById('modalTitle').innerHTML = '<i class="fas fa-user-plus me-2"></i>Registro de Usuario';
+    document.getElementById('modalBody').innerHTML = registroHTML;
+    
+    // Configurar footer del modal
+    const modalFooter = document.getElementById('modalFooter');
+    modalFooter.innerHTML = `
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+            <i class="fas fa-times me-2"></i>Cancelar
+        </button>
+        <button type="button" class="btn btn-primary" onclick="cambiarALogin()">
+            <i class="fas fa-sign-in-alt me-2"></i>Ya tengo cuenta
+        </button>
+    `;
+    
+    // Mostrar modal
+    const modal = new bootstrap.Modal(document.getElementById('infoModal'));
+    modal.show();
+    
+    // Hacer función disponible globalmente
+    window.procesarRegistro = procesarRegistro;
+    window.cambiarALogin = cambiarALogin;
+}
+
+function procesarRegistro(event) {
+    event.preventDefault();
+    console.log('📝 Procesando registro de usuario...');
+    
+    // Obtener datos del formulario
+    const nombre = document.getElementById('regNombre').value.trim();
+    const email = document.getElementById('regEmail').value.trim();
+    const usuario = document.getElementById('regUsuario').value.trim();
+    const password = document.getElementById('regPassword').value;
+    const telefono = document.getElementById('regTelefono').value.trim();
+    const terminos = document.getElementById('regTerminos').checked;
+    
+    // Validaciones
+    if (!terminos) {
+        mostrarAlertaRegistro('Debes aceptar los términos y condiciones', 'danger');
+        return;
+    }
+    
+    if (usuario.length < 3 || password.length < 3) {
+        mostrarAlertaRegistro('Usuario y contraseña deben tener al menos 3 caracteres', 'danger');
+        return;
+    }
+    
+    // Verificar si el usuario ya existe
+    if (verificarUsuarioExistente(usuario, email)) {
+        mostrarAlertaRegistro('El usuario o email ya están registrados', 'danger');
+        return;
+    }
+    
+    // Mostrar loading
+    const btnRegistro = document.getElementById('btnRegistro');
+    const textoOriginal = btnRegistro.innerHTML;
+    btnRegistro.disabled = true;
+    btnRegistro.innerHTML = '<i class="fas fa-spinner fa-spin me-2"></i>Creando cuenta...';
+    
+    // Simular proceso de registro
+    setTimeout(() => {
+        const nuevoUsuario = {
+            usuario: usuario,
+            password: password,
+            nombre: nombre,
+            email: email,
+            telefono: telefono,
+            rol: 'cliente',
+            fechaRegistro: new Date().toLocaleDateString(),
+            activo: true
+        };
+        
+        // Guardar en localStorage
+        const exito = guardarUsuarioRegistrado(nuevoUsuario);
+        
+        if (exito) {
+            mostrarAlertaRegistro('¡Cuenta creada exitosamente! Puedes iniciar sesión ahora.', 'success');
+            
+            // Limpiar formulario y mostrar éxito
+            document.getElementById('registroForm').reset();
+            
+            setTimeout(() => {
+                cerrarModales();
+                alert('✅ ¡Bienvenido a ElectroHogar! Tu cuenta ha sido creada. Ahora puedes iniciar sesión.');
+                
+                // Pre-llenar el formulario de login
+                document.getElementById('username').value = usuario;
+                document.getElementById('password').focus();
+            }, 2000);
+            
+        } else {
+            mostrarAlertaRegistro('Error al crear la cuenta. Inténtalo nuevamente.', 'danger');
+        }
+        
+        // Restaurar botón
+        btnRegistro.disabled = false;
+        btnRegistro.innerHTML = textoOriginal;
+        
+    }, 2000);
+}
+
+function verificarUsuarioExistente(usuario, email) {
+    // Verificar en usuarios predefinidos
+    for (let i = 0; i < USUARIOS_DB.length; i++) {
+        const [user, pass, nombre, userEmail, rol] = USUARIOS_DB[i];
+        if (user === usuario || userEmail === email) {
+            return true;
+        }
+    }
+    
+    // Verificar en usuarios registrados
+    const usuariosRegistrados = obtenerUsuariosRegistrados();
+    return usuariosRegistrados.some(user => 
+        user.usuario === usuario || user.email === email
+    );
+}
+
+function guardarUsuarioRegistrado(usuario) {
+    try {
+        const usuariosRegistrados = obtenerUsuariosRegistrados();
+        usuariosRegistrados.push(usuario);
+        localStorage.setItem('usuariosRegistrados', JSON.stringify(usuariosRegistrados));
+        console.log('✅ Usuario registrado guardado:', usuario.usuario);
+        return true;
+    } catch (error) {
+        console.error('❌ Error al guardar usuario:', error);
+        return false;
+    }
+}
+
+function obtenerUsuariosRegistrados() {
+    try {
+        const usuarios = localStorage.getItem('usuariosRegistrados');
+        return usuarios ? JSON.parse(usuarios) : [];
+    } catch (error) {
+        console.error('❌ Error al obtener usuarios registrados:', error);
+        return [];
+    }
+}
+
+function mostrarAlertaRegistro(mensaje, tipo) {
+    const alertContainer = document.getElementById('registroAlerta');
+    if (!alertContainer) return;
+    
+    const iconos = {
+        success: 'fas fa-check-circle',
+        danger: 'fas fa-exclamation-triangle',
+        warning: 'fas fa-exclamation-circle',
+        info: 'fas fa-info-circle'
+    };
+    
+    alertContainer.innerHTML = `
+        <div class="alert alert-${tipo} alert-dismissible fade show" role="alert">
+            <i class="${iconos[tipo]} me-2"></i>
+            ${mensaje}
+            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        </div>
+    `;
+}
+
+function cambiarALogin() {
+    cerrarModales();
+    alert('💡 Usa el formulario de login para acceder con tu cuenta existente.');
+}
+
 // ==================== ESTRUCTURAS DE CONTROL Y VALIDACIONES ====================
 function validarCampoUsuario() {
     const username = document.getElementById('username').value;
@@ -203,7 +433,7 @@ function validarCampoPassword() {
     }
 }
 
-// ==================== PROCESAMIENTO DE LOGIN ====================
+// ==================== PROCESAMIENTO DE LOGIN ACTUALIZADO ====================
 function procesarLogin() {
     console.log('🔐 Procesando intento de login...');
     
@@ -237,7 +467,7 @@ function autenticarUsuario(username, password, rememberMe) {
     
     let usuarioEncontrado = null;
     
-    // ESTRUCTURA FOR - Buscar usuario en la base de datos
+    // ESTRUCTURA FOR - Buscar en usuarios predefinidos
     for (let i = 0; i < USUARIOS_DB.length; i++) {
         const [user, pass, nombre, email, rol] = USUARIOS_DB[i];
         
@@ -248,9 +478,33 @@ function autenticarUsuario(username, password, rememberMe) {
                 nombre: nombre,
                 email: email,
                 rol: rol,
-                fechaAcceso: new Date().toLocaleString()
+                fechaAcceso: new Date().toLocaleString(),
+                tipo: 'predefinido'
             };
             break;
+        }
+    }
+    
+    // Si no se encontró en predefinidos, buscar en registrados
+    if (!usuarioEncontrado) {
+        const usuariosRegistrados = obtenerUsuariosRegistrados();
+        
+        // ESTRUCTURA WHILE para buscar en usuarios registrados
+        let i = 0;
+        while (i < usuariosRegistrados.length && !usuarioEncontrado) {
+            const user = usuariosRegistrados[i];
+            if (user.usuario === username && user.password === password && user.activo) {
+                usuarioEncontrado = {
+                    username: user.usuario,
+                    nombre: user.nombre,
+                    email: user.email,
+                    rol: user.rol,
+                    telefono: user.telefono,
+                    fechaAcceso: new Date().toLocaleString(),
+                    tipo: 'registrado'
+                };
+            }
+            i++;
         }
     }
     
@@ -281,12 +535,35 @@ function loginExitoso(usuario, recordar) {
     }
     
     // Mostrar mensaje de éxito
-    mostrarAlerta('success', `¡Bienvenido ${usuario.nombre}!`, 'fas fa-check-circle');
+    const tipoUsuario = usuario.tipo === 'registrado' ? '(Usuario registrado)' : '(Usuario del sistema)';
+    mostrarAlerta('success', `¡Bienvenido ${usuario.nombre}! ${tipoUsuario}`, 'fas fa-check-circle');
     
-    // Confetti effect
-    if (confirm('🎉 ¡Login exitoso! ¿Deseas continuar a la gestión de productos?')) {
-        // Redireccionar según el rol
-        redirigirSegunRol(usuario.rol);
+    // Redireccionar según el rol (CORREGIDO) ✅
+    setTimeout(() => {
+        redirigirSegunRolCorregido(usuario.rol);
+    }, 1500);
+}
+
+function redirigirSegunRolCorregido(rol) {
+    // ESTRUCTURA SWITCH-CASE para redirección por rol CORREGIDA ✅
+    switch(rol) {
+        case 'admin':
+        case 'gerente':
+        case 'empleado':
+            console.log(`🔧 Redirigiendo ${rol} a gestión de productos...`);
+            alert(`👨‍💼 Bienvenido al panel de administración. Acceso: ${rol.toUpperCase()}`);
+            window.location.href = 'gestion-productos.html'; // ✅ CORREGIDO
+            break;
+            
+        case 'cliente':
+        default:
+            console.log('🛍️ Redirigiendo cliente a productos...');
+            if (confirm('🛍️ ¡Bienvenido a ElectroHogar! ¿Deseas ver nuestros productos?')) {
+                window.location.href = 'productos.html'; // ✅ CORREGIDO
+            } else {
+                window.location.href = 'index.html';
+            }
+            break;
     }
 }
 
@@ -337,45 +614,9 @@ function bloquearSistema() {
     }
 }
 
-function redirigirSegunRol(rol) {
-    // ESTRUCTURA SWITCH-CASE para redirección por rol
-    switch(rol) {
-        case 'admin':
-        case 'gerente':
-            // Prompt JavaScript para confirmación
-            const destino = prompt('¿A dónde deseas ir?\n1. Gestión de Productos\n2. Dashboard\n3. Inventario', '1');
-            
-            // ESTRUCTURA IF-ELSE para destino
-            if (destino === '1') {
-                window.location.href = 'gestion-productos.html';
-            } else if (destino === '2') {
-                window.location.href = 'dashboard.html';
-            } else if (destino === '3') {
-                alert('📦 Inventario en desarrollo...');
-            } else {
-                window.location.href = 'gestion-productos.html';
-            }
-            break;
-            
-        case 'empleado':
-            alert('👨‍💼 Acceso limitado. Redirigiendo a área de empleados...');
-            window.location.href = 'gestion-productos.html';
-            break;
-            
-        case 'cliente':
-            alert('🛍️ Redirigiendo a la tienda...');
-            window.location.href = 'index.html';
-            break;
-            
-        default:
-            alert('⚠️ Rol no reconocido. Redirigiendo al inicio...');
-            window.location.href = 'index.html';
-    }
-}
-
 // ==================== FUNCIONES DEL SISTEMA ====================
 function mostrarRecuperarPassword() {
-    const emailRecuperacion = prompt('📧 Ingresa tu email corporativo para recuperar la contraseña:');
+    const emailRecuperacion = prompt('📧 Ingresa tu email para recuperar la contraseña:');
     
     if (emailRecuperacion) {
         // Validar formato de email
@@ -383,7 +624,7 @@ function mostrarRecuperarPassword() {
         if (emailRegex.test(emailRecuperacion)) {
             // Simular envío de email
             setTimeout(() => {
-                alert('✅ Se ha enviado un enlace de recuperación a tu email corporativo.');
+                alert('✅ Se ha enviado un enlace de recuperación a tu email.');
                 mostrarModal('Recuperación de Contraseña', 
                     `<div class="text-center">
                         <i class="fas fa-envelope fa-3x text-primary mb-3"></i>
@@ -508,25 +749,53 @@ function verificarSesionExistente() {
     }
 }
 
-
 function mostrarAyuda() {
     const ayudaContent = `
         <div class="text-start">
-            <h5>🆘 Ayuda del Sistema</h5>
-            <h6>Atajos de Teclado:</h6>
+            <h5>🆘 Ayuda del Sistema de Login</h5>
+            
+            <h6>🔐 Usuarios Predefinidos del Sistema:</h6>
+            <div class="table-responsive">
+                <table class="table table-sm">
+                    <thead>
+                        <tr>
+                            <th>Usuario</th>
+                            <th>Contraseña</th>
+                            <th>Rol</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><code>admin</code></td>
+                            <td><code>123</code></td>
+                            <td><span class="badge bg-danger">Administrador</span></td>
+                        </tr>
+                        <tr>
+                            <td><code>gerente</code></td>
+                            <td><code>456</code></td>
+                            <td><span class="badge bg-warning">Gerente</span></td>
+                        </tr>
+                        <tr>
+                            <td><code>empleado1</code></td>
+                            <td><code>789</code></td>
+                            <td><span class="badge bg-info">Empleado</span></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            
+            <h6>👤 Registro de Usuarios:</h6>
+            <ul>
+                <li>Los usuarios pueden registrarse y acceder como clientes</li>
+                <li>Los usuarios registrados son redirigidos a la tienda</li>
+                <li>Los usuarios del sistema acceden al panel de administración</li>
+            </ul>
+            
+            <h6>⌨️ Atajos de Teclado:</h6>
             <ul>
                 <li><kbd>F1</kbd> - Mostrar esta ayuda</li>
                 <li><kbd>F2</kbd> - Información del sistema</li>
                 <li><kbd>Esc</kbd> - Cerrar ventanas</li>
-            </ul>
-            
-            <h6>Características del Sistema:</h6>
-            <ul>
-                <li>🔐 Sistema de autenticación multinivel</li>
-                <li>🛡️ Control de acceso y seguridad</li>
-                <li>🎨 Interfaz adaptive y moderna</li>
-                <li>📱 Diseño completamente responsive</li>
-                <li>⚡ Optimizado para rendimiento</li>
             </ul>
             
             <div class="alert alert-info mt-3">
@@ -558,12 +827,15 @@ window.addEventListener('resize', function() {
 
 // Log de actividad
 console.log('📝 Sistema de Login ElectroHogar v' + SISTEMA_CONFIG.version + ' iniciado');
-console.log('🎯 Todas las estructuras JavaScript implementadas correctamente');
+console.log('🎯 Sistema de registro implementado correctamente');
+console.log('✅ Redirecciones corregidas: admin/empleado -> gestion-productos.html');
 
 // ==================== EXPORTAR FUNCIONES (OPCIONAL) ====================
 export {
     USUARIOS_DB,
     SISTEMA_CONFIG,
     procesarLogin,
-    mostrarRecuperarPassword
+    mostrarRecuperarPassword,
+    mostrarRegistro,
+    obtenerUsuariosRegistrados
 };

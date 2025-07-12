@@ -1,11 +1,20 @@
-/* LOGIN.CSS CORREGIDO */
+/* LOGIN.CSS CORREGIDO + ESTILOS DE REGISTRO */
 :root {
   --login-gradient: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  --success-color: #28a745;
+  --register-gradient: linear-gradient(135deg, #28a745 0%, #20c997 100%);
 }
 
 body {
   background: var(--login-gradient) !important;
   min-height: 100vh !important;
+  display: flex !important;
+  flex-direction: column !important;
+}
+
+/* Asegurar que el main tome el espacio disponible */
+.login-container {
+  flex: 1 !important;
 }
 
 .floating-particles {
@@ -35,11 +44,12 @@ body {
 .login-container {
   position: relative;
   z-index: 10;
-  min-height: 100vh;
+  flex: 1 !important;
   display: flex;
   align-items: center;
   justify-content: center;
   padding: 2rem;
+  min-height: calc(100vh - 200px); /* Ajustar para navbar y footer */
 }
 
 .login-card {
@@ -107,4 +117,298 @@ body {
   color: white !important;
   font-weight: 600 !important;
   font-size: 1.1rem !important;
+  transition: all 0.3s ease !important;
+}
+
+.btn-login:hover {
+  transform: translateY(-2px) !important;
+  box-shadow: 0 5px 15px rgba(0, 123, 255, 0.3) !important;
+}
+
+.btn-login:disabled {
+  opacity: 0.7 !important;
+  transform: none !important;
+}
+
+/* ==================== ESTILOS DE REGISTRO ==================== */
+
+.registro-container {
+  max-width: 100%;
+  animation: slideInUp 0.3s ease-out;
+}
+
+@keyframes slideInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.registro-container .form-control {
+  border: 2px solid #e9ecef;
+  border-radius: 8px;
+  padding: 0.6rem 0.75rem;
+  background: #fff;
+  font-size: 0.95rem;
+}
+
+.registro-container .form-control:focus {
+  border-color: var(--success-color);
+  box-shadow: 0 0 0 3px rgba(40, 167, 69, 0.1);
+}
+
+.registro-container .form-label {
+  font-weight: 600;
+  color: #333;
+  margin-bottom: 0.5rem;
+  font-size: 0.9rem;
+}
+
+.registro-container .form-check-input:checked {
+  background-color: var(--success-color);
+  border-color: var(--success-color);
+}
+
+.registro-container .btn-success {
+  background: var(--register-gradient) !important;
+  border: none !important;
+  padding: 0.75rem !important;
+  border-radius: 8px !important;
+  font-weight: 600 !important;
+  transition: all 0.3s ease !important;
+}
+
+.registro-container .btn-success:hover {
+  transform: translateY(-2px) !important;
+  box-shadow: 0 5px 15px rgba(40, 167, 69, 0.3) !important;
+}
+
+.registro-container .btn-success:disabled {
+  opacity: 0.7 !important;
+  transform: none !important;
+}
+
+/* Alertas específicas del registro */
+.registro-container .alert {
+  border-radius: 8px;
+  border: none;
+  font-size: 0.9rem;
+  padding: 0.75rem 1rem;
+}
+
+.registro-container .alert-success {
+  background: linear-gradient(135deg, #d4edda, #c3e6cb);
+  color: #155724;
+}
+
+.registro-container .alert-danger {
+  background: linear-gradient(135deg, #f8d7da, #f5c6cb);
+  color: #721c24;
+}
+
+/* ==================== MODAL PERSONALIZADO ==================== */
+
+.modal-custom .modal-content {
+  border-radius: 12px !important;
+  border: none !important;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.2) !important;
+}
+
+.modal-custom .modal-header {
+  background: linear-gradient(135deg, #007bff, #0056b3) !important;
+  color: white !important;
+  border-bottom: none !important;
+  border-radius: 12px 12px 0 0 !important;
+}
+
+.modal-custom .modal-header .btn-close {
+  filter: invert(1) grayscale(100%) brightness(200%) !important;
+}
+
+.modal-custom .modal-body {
+  padding: 2rem !important;
+}
+
+.modal-custom .modal-footer {
+  border-top: 1px solid #e9ecef !important;
+  background: #f8f9fa !important;
+  border-radius: 0 0 12px 12px !important;
+}
+
+/* ==================== BOTÓN DE REGISTRO EN LOGIN ==================== */
+
+.btn-outline-success {
+  border: 2px solid var(--success-color) !important;
+  color: var(--success-color) !important;
+  background: transparent !important;
+  border-radius: 8px !important;
+  padding: 0.6rem 1rem !important;
+  font-weight: 600 !important;
+  transition: all 0.3s ease !important;
+}
+
+.btn-outline-success:hover {
+  background: var(--success-color) !important;
+  border-color: var(--success-color) !important;
+  color: white !important;
+  transform: translateY(-2px) !important;
+  box-shadow: 0 5px 15px rgba(40, 167, 69, 0.3) !important;
+}
+
+/* ==================== EFECTOS DE ANIMACIÓN ==================== */
+
+.shake {
+  animation: shake 0.5s ease-in-out;
+}
+
+@keyframes shake {
+  0%, 100% { transform: translateX(0); }
+  25% { transform: translateX(-10px); }
+  75% { transform: translateX(10px); }
+}
+
+.loading-spinner {
+  display: inline-block;
+  width: 1rem;
+  height: 1rem;
+  border: 2px solid transparent;
+  border-top: 2px solid currentColor;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+/* ==================== TEMA OSCURO (OPCIONAL) ==================== */
+
+.dark-mode {
+  --login-gradient: linear-gradient(135deg, #2c3e50 0%, #34495e 100%) !important;
+}
+
+.dark-mode .login-card {
+  background: rgba(52, 58, 64, 0.95) !important;
+  color: #fff !important;
+}
+
+.dark-mode .form-control {
+  background: rgba(108, 117, 125, 0.3) !important;
+  border-color: #6c757d !important;
+  color: #fff !important;
+}
+
+.dark-mode .form-control::placeholder {
+  color: #adb5bd !important;
+}
+
+/* ==================== RESPONSIVE ==================== */
+
+/* Footer específico para login */
+footer {
+  margin-top: auto !important;
+  position: relative !important;
+  z-index: 10 !important;
+}
+
+/* Navbar específico para login */
+.navbar {
+  position: relative !important;
+  z-index: 1000 !important;
+  backdrop-filter: blur(10px) !important;
+}
+
+@media (max-width: 768px) {
+  .login-container {
+    padding: 1rem;
+    min-height: calc(100vh - 300px); /* Más espacio para navbar/footer en mobile */
+  }
+  
+  .login-card {
+    padding: 1.5rem !important;
+    margin: 1rem 0 !important;
+  }
+  
+  .login-logo {
+    width: 60px !important;
+    height: 60px !important;
+    font-size: 1.5rem !important;
+  }
+  
+  .registro-container {
+    padding: 0 !important;
+  }
+  
+  .modal-custom .modal-body {
+    padding: 1.5rem !important;
+  }
+  
+  .registro-container .row .col-md-6 {
+    margin-bottom: 1rem;
+  }
+}
+
+@media (max-width: 576px) {
+  .form-group {
+    margin-bottom: 1rem !important;
+  }
+  
+  .btn-login,
+  .btn-outline-success {
+    padding: 0.6rem !important;
+    font-size: 1rem !important;
+  }
+  
+  .modal-custom .modal-dialog {
+    margin: 0.5rem !important;
+  }
+}
+
+/* ==================== ESTADOS DE VALIDACIÓN ==================== */
+
+.form-control.is-invalid {
+  border-color: #dc3545 !important;
+  box-shadow: 0 0 0 3px rgba(220, 53, 69, 0.1) !important;
+}
+
+.form-control.is-valid {
+  border-color: var(--success-color) !important;
+  box-shadow: 0 0 0 3px rgba(40, 167, 69, 0.1) !important;
+}
+
+.invalid-feedback {
+  display: block !important;
+  width: 100% !important;
+  margin-top: 0.25rem !important;
+  font-size: 0.875rem !important;
+  color: #dc3545 !important;
+}
+
+/* ==================== ACCESIBILIDAD ==================== */
+
+@media (prefers-reduced-motion: reduce) {
+  .pulse-animation,
+  .shake,
+  .loading-spinner,
+  .slideInUp {
+    animation: none !important;
+  }
+  
+  .btn-login:hover,
+  .btn-outline-success:hover,
+  .registro-container .btn-success:hover {
+    transform: none !important;
+  }
+}
+
+/* Focus visible para accesibilidad */
+.btn:focus-visible,
+.form-control:focus-visible {
+  outline: 2px solid #007bff !important;
+  outline-offset: 2px !important;
 }
