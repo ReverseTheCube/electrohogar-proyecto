@@ -164,8 +164,7 @@ function agregarProductoAlDOMProductos(producto) {
         productoElement.style.transform = 'translateY(0)';
     }, 100);
     
-    // Configurar evento del botón de agregar al carrito
-    configurarBotonCarrito(productoElement);
+    
     
     console.log('✅ Producto agregado al DOM de productos.html');
 }
@@ -195,33 +194,7 @@ function cargarProductosDinamicosEnPagina() {
     }
 }
 
-// ==================== CONFIGURAR BOTÓN DE CARRITO ====================
-function configurarBotonCarrito(productoElement) {
-    const boton = productoElement.querySelector('.agregar-carrito');
-    if (!boton) return;
-    
-    boton.addEventListener('click', function(e) {
-        e.preventDefault();
-        
-        const card = e.target.closest('.card');
-        const nombre = card.querySelector('.card-title').textContent;
-        const precioTexto = boton.getAttribute('data-precio');
-        const precio = parseFloat(precioTexto);
-        const cantidadInput = card.querySelector('.cantidad');
-        const cantidad = parseInt(cantidadInput.value) || 1;
-        
-        // Verificar si el módulo de carrito está disponible
-        if (typeof agregarProductoAlCarrito !== 'undefined') {
-            if (agregarProductoAlCarrito(nombre, precio, cantidad)) {
-                mostrarNotificacion('Producto agregado al carrito', 'success');
-                cantidadInput.value = 1;
-            }
-        } else {
-            // Fallback si no está el módulo de carrito
-            alert(`Producto "${nombre}" agregado al carrito\nCantidad: ${cantidad}\nPrecio: $${precio.toFixed(2)}`);
-        }
-    });
-}
+
 
 // ==================== FUNCIÓN PARA EDITAR PRODUCTOS DINÁMICOS ====================
 function editarProductoDinamico(productoId) {

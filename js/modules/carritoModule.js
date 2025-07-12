@@ -1,11 +1,12 @@
 // =====================================================
-// MÓDULO DEL CARRITO - ELECTROHOGAR (Versión Corregida)
+// MÓDULO DEL CARRITO - COMPATIBLE CON CHECKOUT
+// ✅ Sin duplicados + IGV incluido + Compatible con validación
 // =====================================================
 
 // Constantes
-const IVA = 0.18;
 const MAX_PRODUCTOS = 10;
 let carrito = [];
+let eventListenersConfigurados = false; // Prevenir duplicados
 
 // ARREGLOS BIDIMENSIONALES
 let historialCompras = [
@@ -25,12 +26,89 @@ const descuentosPorCantidad = [
     [11, 999, 25]
 ];
 
-// Inicializar carrito desde localStorage
+// ==================== INICIALIZACIÓN ====================
 export function inicializarCarrito() {
     const carritoGuardado = localStorage.getItem('carrito');
     if (carritoGuardado) {
         carrito = JSON.parse(carritoGuardado);
         actualizarContadorGlobal();
+    }
+    
+    // 🔧 SOLO configurar event listeners si NO estamos en checkout
+    if (!esCheckoutPage()) {
+        configurarEventListenersUnicos();
+    }
+}
+
+// 🔧 FUNCIÓN: Detectar si estamos en checkout
+function esCheckoutPage() {
+    return document.getElementById('checkout-form') !== null;
+}
+
+// 🔧 FUNCIÓN: Configurar event listeners sin duplicados
+function configurarEventListenersUnicos() {
+    if (eventListenersConfigurados) {
+        console.log('⚠️ Event listeners ya configurados, evitando duplicados');
+        return;
+    }
+    
+    console.log('🔧 Configurando event listeners únicos para carrito...');
+    
+    // Usar delegación de eventos SOLO para productos
+    document.addEventListener('click', function(e) {
+        // SOLO procesar si es botón de agregar carrito Y no estamos en checkout
+        if ((e.target.classList.contains('agregar-carrito') || 
+             e.target.closest('.agregar-carrito')) && !esCheckoutPage()) {
+            
+            const boton = e.target.classList.contains('agregar-carrito') ? 
+                         e.target : e.target.closest('.agregar-carrito');
+            
+            // Prevenir múltiples ejecuciones
+            e.preventDefault();
+            e.stopPropagation();
+            
+            manejarClickAgregarCarrito(boton);
+        }
+    });
+    
+    eventListenersConfigurados = true;
+    console.log('✅ Event listeners únicos configurados (excluyendo checkout)');
+}
+
+// 🔧 FUNCIÓN: Manejar click de agregar al carrito
+function manejarClickAgregarCarrito(boton) {
+    console.log('🛒 Procesando click único en botón de carrito...');
+    
+    // Obtener datos del producto
+    const card = boton.closest('.card');
+    if (!card) {
+        console.error('❌ No se encontró la tarjeta del producto');
+        return;
+    }
+    
+    const nombre = card.querySelector('.card-title').textContent.trim();
+    const precioTexto = boton.getAttribute('data-precio') || 
+                       card.querySelector('.text-success').textContent.replace(/[^\d.]/g, '');
+    const precio = parseFloat(precioTexto);
+    const cantidadInput = card.querySelector('.cantidad');
+    const cantidad = parseInt(cantidadInput ? cantidadInput.value : 1) || 1;
+    
+    console.log('📝 Datos obtenidos:', { nombre, precio, cantidad });
+    
+    // Validar datos
+    if (!nombre || isNaN(precio) || isNaN(cantidad)) {
+        alert('Error al obtener datos del producto');
+        return;
+    }
+    
+    // Agregar al carrito
+    if (agregarProductoAlCarrito(nombre, precio, cantidad)) {
+        alert(`✅ ${nombre} agregado al carrito (${cantidad} unidad${cantidad > 1 ? 'es' : ''})`);
+        
+        // Resetear cantidad si existe el input
+        if (cantidadInput) {
+            cantidadInput.value = 1;
+        }
     }
 }
 
@@ -55,26 +133,35 @@ function calcularDescuentoPorCantidad(totalProductos) {
 
 // IF-ELSE - Validar y agregar producto con lógica avanzada
 export function agregarProductoAlCarrito(nombre, precio, cantidad) {
-    // IF-ELSE SIMPLE - Validación básica
+    console.log(`🛒 Agregando: ${nombre} x${cantidad}`);
+    
+    // Validaciones básicas
     if (cantidad < 1) {
         alert('La cantidad debe ser al menos 1');
         return false;
     }
     
-    // IF-ELSE DOBLE - Verificar límites
-    if (carrito.length >= MAX_PRODUCTOS) {
-        alert(`Máximo ${MAX_PRODUCTOS} productos permitidos`);
+    // Cargar carrito actual
+    let carrito = [];
+    try {
+        const carritoGuardado = localStorage.getItem('carrito');
+        carrito = carritoGuardado ? JSON.parse(carritoGuardado) : [];
+    } catch (error) {
+        console.error('❌ Error al cargar carrito:', error);
+        carrito = [];
+    }
+    
+    if (carrito.length >= 10) {
+        alert('Máximo 10 productos permitidos');
         return false;
     }
     
-    // Buscar si el producto ya está en el carrito
+    // Buscar producto existente
     const productoExistente = carrito.find(p => p.nombre === nombre);
     
-    // IF-ELSE para manejar producto existente vs nuevo
     if (productoExistente) {
         const nuevaCantidad = productoExistente.cantidad + cantidad;
         
-        // IF-ELSE anidado para validar stock máximo
         if (nuevaCantidad > 20) {
             alert(`No puedes agregar más de 20 unidades del mismo producto. Actualmente tienes ${productoExistente.cantidad}`);
             return false;
@@ -83,7 +170,7 @@ export function agregarProductoAlCarrito(nombre, precio, cantidad) {
             productoExistente.subtotal = productoExistente.precio * nuevaCantidad;
         }
     } else {
-        // Producto nuevo - agregar al carrito
+        // Producto nuevo
         const nuevoProducto = {
             nombre,
             precio,
@@ -94,7 +181,24 @@ export function agregarProductoAlCarrito(nombre, precio, cantidad) {
         carrito.push(nuevoProducto);
     }
     
-    guardarCarrito();
+    // Guardar carrito
+    try {
+        localStorage.setItem('carrito', JSON.stringify(carrito));
+        console.log('✅ Carrito guardado');
+    } catch (error) {
+        console.error('❌ Error al guardar carrito:', error);
+        return false;
+    }
+    
+    // 🔧 IMPORTANTE: Actualizar contador INMEDIATAMENTE
+    actualizarContadorGlobal();
+    
+    // También actualizar con un pequeño delay para asegurar
+    setTimeout(() => {
+        actualizarContadorGlobal();
+    }, 100);
+    
+    console.log(`✅ Producto "${nombre}" agregado exitosamente`);
     return true;
 }
 
@@ -139,123 +243,156 @@ function aplicarDescuentoEspecial(nombreProducto, precio) {
             razonDescuento = "Promoción especial en cocinas";
             break;
         case "alarmas de seguridad":
-            descuentoEspecial = precio * 0.10;
-            razonDescuento = "Descuento por seguridad del hogar";
-            break;
-        case "amplificador de guitarra":
-            descuentoEspecial = precio * 0.18;
-            razonDescuento = "Descuento especial en equipos de audio";
+            descuentoEspecial = precio * 0.25;
+            razonDescuento = "Mega descuento en seguridad";
             break;
         default:
-            descuentoEspecial = precio * 0.05;
-            razonDescuento = "Descuento general de la tienda";
+            descuentoEspecial = 0;
+            razonDescuento = "Sin descuento especial";
+            break;
     }
     
-    return {
-        descuento: descuentoEspecial,
-        razon: razonDescuento
-    };
+    return { descuento: descuentoEspecial, razon: razonDescuento };
 }
 
-// FOR - Mostrar carrito con cálculos avanzados
+// ==================== MOSTRAR CARRITO ====================
 export function mostrarCarrito() {
-    const tbody = document.getElementById('carrito-body');
-    const totalElement = document.getElementById('total');
+    const carritoBody = document.getElementById('carrito-body');
+    const totalElemento = document.getElementById('total');
     
-    if (!tbody || !totalElement) return;
+    if (!carritoBody) return;
     
-    limpiarProductosVacios();
-    
-    // Limpiar tabla
-    tbody.innerHTML = '';
-    
-    // Variables para cálculos con operadores matemáticos
-    let subtotalGeneral = 0;
-    let descuentoTotalPorCantidad = 0;
-    let descuentoTotalEspecial = 0;
-    let totalProductos = 0;
-    
-    // FOR principal para recorrer carrito
-    for (let i = 0; i < carrito.length; i++) {
-        const producto = carrito[i];
-        
-        const descuentoInfo = aplicarDescuentoEspecial(producto.nombre, producto.precio);
-        const precioConDescuentoEspecial = producto.precio - descuentoInfo.descuento;
-        const subtotalConDescuento = precioConDescuentoEspecial * producto.cantidad;
-        
-        subtotalGeneral += subtotalConDescuento;
-        descuentoTotalEspecial += descuentoInfo.descuento * producto.cantidad;
-        totalProductos += producto.cantidad;
-        
-        // Crear fila
-        const fila = document.createElement('tr');
-        fila.innerHTML = `
-            <td>
-                <strong>${producto.nombre}</strong>
-                <br><small class="text-muted">Agregado: ${producto.fechaAgregado || 'N/A'}</small>
-                <br><small class="text-success">${descuentoInfo.razon}</small>
-            </td>
-            <td>
-                <span class="text-decoration-line-through text-muted">$${producto.precio.toFixed(2)}</span>
-                <br><strong class="text-success">$${precioConDescuentoEspecial.toFixed(2)}</strong>
-                <br><small class="text-success">Ahorro: $${descuentoInfo.descuento.toFixed(2)}</small>
-            </td>
-            <td>
-                <input type="number" min="1" max="20" value="${producto.cantidad}" 
-                       class="form-control cantidad-producto" data-index="${i}" style="width: 80px;">
-            </td>
-            <td>
-                <strong>$${subtotalConDescuento.toFixed(2)}</strong>
-            </td>
-            <td>
-                <button class="btn btn-danger btn-sm btn-eliminar" data-index="${i}">
-                    <i class="fas fa-trash"></i>
-                </button>
-            </td>
+    if (carrito.length === 0) {
+        carritoBody.innerHTML = `
+            <tr>
+                <td colspan="5" class="text-center py-4">
+                    <i class="fas fa-shopping-cart fa-3x text-muted mb-3"></i>
+                    <p class="text-muted">Tu carrito está vacío</p>
+                    <a href="productos.html" class="btn btn-primary">
+                        <i class="fas fa-shopping-bag me-2"></i>Ver Productos
+                    </a>
+                </td>
+            </tr>
         `;
-        tbody.appendChild(fila);
+        if (totalElemento) totalElemento.textContent = '$0.00';
+        return;
     }
     
+    let totalGeneral = 0;
+    let html = '';
+    
+    carrito.forEach((producto, index) => {
+        // Aplicar descuentos especiales
+        const descuentoInfo = aplicarDescuentoEspecial(producto.nombre, producto.precio);
+        const precioConDescuento = producto.precio - descuentoInfo.descuento;
+        const subtotalConDescuento = precioConDescuento * producto.cantidad;
+        
+        html += `
+            <tr>
+                <td>
+                    <strong>${producto.nombre}</strong>
+                    ${descuentoInfo.descuento > 0 ? 
+                        `<br><small class="text-success">🎯 ${descuentoInfo.razon}</small>` : ''}
+                </td>
+                <td>
+                    <div>
+                        ${descuentoInfo.descuento > 0 ? 
+                            `<span class="text-decoration-line-through text-muted">$${producto.precio.toFixed(2)}</span><br>
+                             <span class="text-success fw-bold">$${precioConDescuento.toFixed(2)}</span>` : 
+                            `<span>$${producto.precio.toFixed(2)}</span>`}
+                    </div>
+                    <small class="text-muted">🏷️ IGV incluido</small>
+                </td>
+                <td>
+                    <input type="number" class="form-control cantidad-producto" 
+                           value="${producto.cantidad}" min="1" max="20" 
+                           data-index="${index}" style="width: 80px;">
+                </td>
+                <td>
+                    <strong>$${subtotalConDescuento.toFixed(2)}</strong>
+                    ${descuentoInfo.descuento > 0 ? 
+                        `<br><small class="text-success">Ahorro: $${(descuentoInfo.descuento * producto.cantidad).toFixed(2)}</small>` : ''}
+                </td>
+                <td>
+                    <button class="btn btn-danger btn-sm btn-eliminar" data-index="${index}">
+                        <i class="fas fa-trash"></i>
+                    </button>
+                </td>
+            </tr>
+        `;
+        
+        totalGeneral += subtotalConDescuento;
+    });
+    
     // Calcular descuento por cantidad total
-    const descuentoPorCantidadPorcentaje = calcularDescuentoPorCantidad(totalProductos);
-    descuentoTotalPorCantidad = subtotalGeneral * (descuentoPorCantidadPorcentaje / 100);
+    const totalProductos = carrito.reduce((sum, p) => sum + p.cantidad, 0);
+    const descuentoPorcentaje = calcularDescuentoPorCantidad(totalProductos);
+    const descuentoPorCantidad = totalGeneral * (descuentoPorcentaje / 100);
+    const totalFinal = totalGeneral - descuentoPorCantidad;
     
-    const subtotalConDescuentos = subtotalGeneral - descuentoTotalPorCantidad;
-    const impuestos = subtotalConDescuentos * IVA;
-    const totalFinal = subtotalConDescuentos + impuestos;
+    carritoBody.innerHTML = html;
     
-    // Mostrar total
-    totalElement.innerHTML = `
-        <div class="bg-light p-3 rounded">
-            <h6>💰 Resumen de Compra:</h6>
+    // 🔧 SOLUCIÓN: Mostrar total con IGV incluido (no adicional)
+    if (totalElemento) {
+        let textoTotal = `$${totalFinal.toFixed(2)}`;
+        if (descuentoPorcentaje > 0) {
+            textoTotal += ` <small class="text-success">(${descuentoPorcentaje}% desc. cantidad)</small>`;
+        }
+        totalElemento.innerHTML = textoTotal;
+    }
+    
+    // Mostrar resumen detallado
+    mostrarResumenDetallado(totalGeneral, descuentoPorCantidad, totalFinal, totalProductos);
+}
+
+// 🔧 FUNCIÓN: Mostrar resumen con IGV incluido
+function mostrarResumenDetallado(subtotal, descuentoCantidad, total, totalProductos) {
+    const resumenExistente = document.getElementById('resumen-detallado');
+    if (resumenExistente) {
+        resumenExistente.remove();
+    }
+    
+    const carritoContainer = document.querySelector('.table-responsive');
+    if (!carritoContainer) return;
+    
+    // 🔧 IGV incluido, no adicional
+    const igvIncluido = total * 0.153; // IGV que ya está incluido en los precios
+    const baseImponible = total - igvIncluido;
+    
+    const resumenHTML = `
+        <div id="resumen-detallado" class="mt-4 p-3 bg-light rounded">
+            <h5 class="mb-3">📊 Resumen Detallado del Pedido</h5>
             <div class="row">
                 <div class="col-6">
-                    <small>Subtotal original:</small><br>
-                    <small>Descuentos especiales:</small><br>
-                    <small>Descuento por cantidad (${descuentoPorCantidadPorcentaje}%):</small><br>
-                    <small>Subtotal con descuentos:</small><br>
-                    <small>IVA (18%):</small><br>
+                    <small>📦 Total productos:</small><br>
+                    <small>💰 Subtotal con descuentos:</small><br>
+                    <small>📊 Base imponible:</small><br>
+                    <small>🏷️ IGV (18% incluido):</small><br>
+                    ${descuentoCantidad > 0 ? '<small class="text-success">🎯 Descuento por cantidad:</small><br>' : ''}
                 </div>
                 <div class="col-6 text-end">
-                    <small>$${(subtotalGeneral + descuentoTotalEspecial).toFixed(2)}</small><br>
-                    <small class="text-success">-$${descuentoTotalEspecial.toFixed(2)}</small><br>
-                    <small class="text-success">-$${descuentoTotalPorCantidad.toFixed(2)}</small><br>
-                    <small>$${subtotalConDescuentos.toFixed(2)}</small><br>
-                    <small>+$${impuestos.toFixed(2)}</small><br>
+                    <small>${totalProductos} unidades</small><br>
+                    <small>$${subtotal.toFixed(2)}</small><br>
+                    <small>$${baseImponible.toFixed(2)}</small><br>
+                    <small>$${igvIncluido.toFixed(2)}</small><br>
+                    ${descuentoCantidad > 0 ? `<small class="text-success">-$${descuentoCantidad.toFixed(2)}</small><br>` : ''}
                 </div>
             </div>
             <hr>
             <div class="d-flex justify-content-between">
-                <strong>TOTAL FINAL:</strong>
-                <strong class="text-primary">$${totalFinal.toFixed(2)}</strong>
+                <strong>TOTAL FINAL (IGV incluido):</strong>
+                <strong class="text-primary">$${total.toFixed(2)}</strong>
             </div>
+            <small class="text-muted mt-2 d-block">
+                ✅ Todos los precios incluyen IGV del 18%
+            </small>
         </div>
     `;
+    
+    carritoContainer.insertAdjacentHTML('afterend', resumenHTML);
 }
 
-
-
-// Funciones auxiliares
+// ==================== FUNCIONES AUXILIARES ====================
 export function actualizarCantidad(index, nuevaCantidad) {
     if (index >= 0 && index < carrito.length && nuevaCantidad > 0) {
         if (nuevaCantidad > 20) {
@@ -289,36 +426,110 @@ export function vaciarCarrito() {
     carrito = [];
     guardarCarrito();
     actualizarContadorGlobal();
-    alert(`Carrito vaciado. Se eliminaron ${cantidadProductos} productos.`);
+    alert(`Carrito vaciado. ${cantidadProductos} productos eliminados.`);
+    mostrarCarrito();
+}
+
+export function obtenerCarrito() {
+    return carrito;
+}
+
+export function obtenerTotalCarrito() {
+    return carrito.reduce((total, producto) => {
+        const descuentoInfo = aplicarDescuentoEspecial(producto.nombre, producto.precio);
+        const precioConDescuento = producto.precio - descuentoInfo.descuento;
+        return total + (precioConDescuento * producto.cantidad);
+    }, 0);
+}
+
+export function actualizarContadorGlobal() {
+    console.log('🔄 Actualizando contador del carrito...');
+    
+    // Obtener carrito actual desde localStorage
+    let carrito = [];
+    try {
+        const carritoGuardado = localStorage.getItem('carrito');
+        carrito = carritoGuardado ? JSON.parse(carritoGuardado) : [];
+    } catch (error) {
+        console.error('❌ Error al cargar carrito:', error);
+        carrito = [];
+    }
+    
+    // Calcular total de productos
+    let totalProductos = 0;
+    carrito.forEach(producto => {
+        totalProductos += producto.cantidad;
+    });
+    
+    console.log(`📊 Total productos: ${totalProductos}`);
+    
+    // Buscar el elemento contador
+    const contador = document.getElementById('contador-carrito');
+    
+    if (contador) {
+        // Actualizar el número
+        contador.textContent = totalProductos;
+        
+        // Mostrar/ocultar según cantidad
+        if (totalProductos > 0) {
+            contador.style.display = 'inline';
+            
+            // Cambiar color según cantidad
+            if (totalProductos <= 3) {
+                contador.className = 'position-absolute top-0 start-100 translate-middle badge rounded-pill bg-success';
+            } else if (totalProductos <= 7) {
+                contador.className = 'position-absolute top-0 start-100 translate-middle badge rounded-pill bg-warning text-dark';
+            } else {
+                contador.className = 'position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger';
+            }
+            
+            // Pequeña animación
+            contador.style.transform = 'scale(1.2)';
+            setTimeout(() => {
+                contador.style.transform = 'scale(1)';
+                contador.style.transition = 'transform 0.2s ease';
+            }, 200);
+            
+        } else {
+            // Ocultar si no hay productos
+            contador.style.display = 'none';
+        }
+        
+        console.log(`✅ Contador actualizado: ${totalProductos}`);
+    } else {
+        console.warn('⚠️ Elemento #contador-carrito no encontrado');
+    }
 }
 
 function guardarCarrito() {
     localStorage.setItem('carrito', JSON.stringify(carrito));
+}
+export function inicializarContadorCarrito() {
+    console.log('🚀 Inicializando contador...');
+    
+    // Actualizar inmediatamente
     actualizarContadorGlobal();
+    
+    // Verificar si hay cambios en localStorage (para otras pestañas)
+    window.addEventListener('storage', function(e) {
+        if (e.key === 'carrito') {
+            console.log('🔄 Carrito cambió en otra pestaña, actualizando contador...');
+            actualizarContadorGlobal();
+        }
+    });
+}
+// Auto-inicializar
+if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', inicializarContadorCarrito);
+} else {
+    inicializarContadorCarrito();
+}
+// ==================== INICIALIZACIÓN AUTOMÁTICA ====================
+// 🔧 Auto-inicializar cuando se carga el módulo
+if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', inicializarCarrito);
+} else {
+    inicializarCarrito();
 }
 
-// FOR para actualizar contador
-export function actualizarContadorGlobal() {
-    let totalProductos = 0;
-    
-    for (let i = 0; i < carrito.length; i++) {
-        totalProductos += carrito[i].cantidad;
-    }
-    
-    const contadorGlobal = document.getElementById('contador-carrito');
-    
-    if (contadorGlobal) {
-        contadorGlobal.textContent = totalProductos;
-        
-        // IF-ELSE para cambiar color según cantidad
-        if (totalProductos === 0) {
-            contadorGlobal.className = 'position-absolute top-0 start-100 translate-middle badge rounded-pill bg-secondary';
-        } else if (totalProductos <= 3) {
-            contadorGlobal.className = 'position-absolute top-0 start-100 translate-middle badge rounded-pill bg-success';
-        } else if (totalProductos <= 7) {
-            contadorGlobal.className = 'position-absolute top-0 start-100 translate-middle badge rounded-pill bg-warning';
-        } else {
-            contadorGlobal.className = 'position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger';
-        }
-    }
-}
+console.log('✅ Módulo de carrito compatible cargado - Sin interferir con checkout');

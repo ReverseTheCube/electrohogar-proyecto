@@ -1,5 +1,6 @@
 // =====================================================
-// MÓDULO CONFIRMACIÓN FIX - ELECTROHOGAR
+// MÓDULO CONFIRMACIÓN - ELECTROHOGAR (VERSIÓN CORREGIDA)
+// ✅ SOLUCIÓN: IGV incluido en precios (no adicional)
 // =====================================================
 
 // Variable global
@@ -71,50 +72,40 @@ function mostrarErrorSinPedido() {
 
 // ==================== 3. MOSTRAR INFORMACIÓN DEL PEDIDO ====================
 function mostrarInformacionPedido() {
-    console.log('📋 Mostrando información del pedido...');
+    console.log('📝 Mostrando información del pedido...');
     
-    // Número de pedido
-    const numeroPedido = document.getElementById('numero-pedido');
-    if (numeroPedido && datosUltimoPedido.numeroPedido) {
-        numeroPedido.textContent = `#${datosUltimoPedido.numeroPedido}`;
-        console.log('✅ Número de pedido mostrado:', datosUltimoPedido.numeroPedido);
-    }
+    const elementos = {
+        'numero-pedido': datosUltimoPedido.numeroPedido || '#EH000000',
+        'fecha-pedido': datosUltimoPedido.fecha || new Date().toLocaleDateString()
+    };
     
-    // Fecha del pedido
-    const fechaPedido = document.getElementById('fecha-pedido');
-    if (fechaPedido && datosUltimoPedido.fecha) {
-        const fecha = new Date(datosUltimoPedido.fecha);
-        const fechaFormateada = fecha.toLocaleDateString('es-PE', {
-            year: 'numeric',
-            month: 'long',
-            day: 'numeric',
-            hour: '2-digit',
-            minute: '2-digit'
-        });
-        fechaPedido.textContent = fechaFormateada;
-        console.log('✅ Fecha mostrada:', fechaFormateada);
+    for (const [id, valor] of Object.entries(elementos)) {
+        const elemento = document.getElementById(id);
+        if (elemento) {
+            elemento.textContent = valor;
+            console.log(`✅ ${id}: ${valor}`);
+        } else {
+            console.warn(`⚠️ No se encontró elemento con ID: ${id}`);
+        }
     }
 }
 
 // ==================== 4. MOSTRAR INFORMACIÓN DEL CLIENTE ====================
 function mostrarInformacionCliente() {
     console.log('👤 Mostrando información del cliente...');
-    console.log('📋 Datos disponibles:', datosUltimoPedido);
     
-    // Mapeo de campos del cliente
-    const camposCliente = {
-        'cliente-nombre': `${datosUltimoPedido.nombre || ''} ${datosUltimoPedido.apellidos || ''}`.trim(),
+    const elementos = {
+        'cliente-nombre': `${datosUltimoPedido.nombre || '--'} ${datosUltimoPedido.apellidos || ''}`,
         'cliente-email': datosUltimoPedido.email || '--',
-        'cliente-telefono': datosUltimoPedido.telefono || '--', 
+        'cliente-telefono': datosUltimoPedido.telefono || '--',
         'cliente-documento': datosUltimoPedido.documento || '--',
-        'cliente-direccion': construirDireccionCompleta()
+        'direccion-completa': construirDireccionCompleta()
     };
     
-    // Llenar cada campo
-    for (const [id, valor] of Object.entries(camposCliente)) {
+    for (const [id, valor] of Object.entries(elementos)) {
         const elemento = document.getElementById(id);
         if (elemento) {
-            elemento.textContent = valor || '--';
+            elemento.textContent = valor;
             console.log(`✅ ${id}: ${valor}`);
         } else {
             console.warn(`⚠️ No se encontró elemento con ID: ${id}`);
@@ -128,295 +119,41 @@ function construirDireccionCompleta() {
     const provincia = datosUltimoPedido.provincia || '';
     const departamento = datosUltimoPedido.departamento || '';
     
-    let direccionCompleta = direccion;
-    if (distrito) direccionCompleta += `, ${distrito}`;
-    if (provincia) direccionCompleta += `, ${provincia}`;
-    if (departamento) direccionCompleta += `, ${departamento}`;
-    
-    return direccionCompleta || '--';
+    return `${direccion}, ${distrito}, ${provincia}, ${departamento}`.replace(/^,\s*|,\s*$/g, '');
 }
 
 // ==================== 5. MOSTRAR MÉTODO DE PAGO ====================
 function mostrarMetodoPago() {
     console.log('💳 Mostrando método de pago...');
     
-    const metodoPagoContainer = document.getElementById('metodo-pago-info');
-    if (!metodoPagoContainer) {
+    const metodoPago = datosUltimoPedido['metodo-pago'] || 'contraentrega';
+    const contenedor = document.getElementById('metodo-pago-info');
+    
+    if (contenedor) {
+        const infoHTML = obtenerInfoMetodoPago(metodoPago);
+        contenedor.innerHTML = infoHTML;
+        console.log(`✅ Método de pago: ${metodoPago}`);
+    } else {
         console.warn('⚠️ No se encontró contenedor de método de pago');
-        return;
     }
-    
-    const metodoPago = datosUltimoPedido['metodo-pago'] || 'contraentrega';
-    console.log('💳 Método de pago:', metodoPago);
-    
-    let contenidoHTML = '';
-    
-    switch(metodoPago) {
-        case 'yape':
-            contenidoHTML = `
-                <div class="payment-method-card">
-                    <div class="d-flex align-items-center mb-3">
-                        <i class="fas fa-mobile-alt text-primary fa-2x me-3"></i>
-                        <div>
-                            <h5 class="mb-1">Pago con Yape / Plin</h5>
-                            <small class="text-muted">Pendiente de pago</small>
-                        </div>
-                    </div>
-                    <div class="alert alert-info">
-                        <strong>Instrucciones:</strong><br>
-                        • Envía S/ ${datosUltimoPedido.calculos?.total || '0.00'} al número: <strong>987-654-321</strong><br>
-                        • Concepto: <strong>Pedido #${datosUltimoPedido.numeroPedido}</strong><br>
-                        • Envía captura del voucher por WhatsApp
-                    </div>
-                </div>
-            `;
-            break;
-            
-        case 'transferencia':
-            contenidoHTML = `
-                <div class="payment-method-card">
-                    <div class="d-flex align-items-center mb-3">
-                        <i class="fas fa-university text-primary fa-2x me-3"></i>
-                        <div>
-                            <h5 class="mb-1">Transferencia Bancaria</h5>
-                            <small class="text-muted">Pendiente de pago</small>
-                        </div>
-                    </div>
-                    <div class="alert alert-info">
-                        <strong>Datos Bancarios:</strong><br>
-                        • Banco: Banco de Crédito del Perú (BCP)<br>
-                        • Cuenta: 285-90876543-2-10<br>
-                        • CCI: 00228590876543210165<br>
-                        • Titular: ElectroHogar SAC<br>
-                        • Monto: S/ ${datosUltimoPedido.calculos?.total || '0.00'}
-                    </div>
-                </div>
-            `;
-            break;
-            
+}
+
+function obtenerInfoMetodoPago(metodo) {
+    switch(metodo) {
         case 'contraentrega':
-            contenidoHTML = `
-                <div class="payment-method-card">
-                    <div class="d-flex align-items-center mb-3">
-                        <i class="fas fa-money-bill-wave text-success fa-2x me-3"></i>
-                        <div>
-                            <h5 class="mb-1">Pago Contra Entrega</h5>
-                            <small class="text-success">Confirmado</small>
-                        </div>
-                    </div>
-                    <div class="alert alert-success">
-                        <strong>Información:</strong><br>
-                        • Pagarás en efectivo al recibir tu pedido<br>
-                        • Monto a pagar: S/ ${datosUltimoPedido.calculos?.total || '0.00'}<br>
-                        • Prepara el monto exacto
-                    </div>
-                </div>
-            `;
-            break;
-            
-        case 'tarjeta':
-            const numeroTarjeta = datosUltimoPedido['numero-tarjeta'] || '****';
-            const ultimosDigitos = numeroTarjeta.slice(-4);
-            contenidoHTML = `
-                <div class="payment-method-card">
-                    <div class="d-flex align-items-center mb-3">
-                        <i class="fas fa-credit-card text-success fa-2x me-3"></i>
-                        <div>
-                            <h5 class="mb-1">Pago con Tarjeta</h5>
-                            <small class="text-success">Pago Aprobado</small>
-                        </div>
-                    </div>
-                    <div class="alert alert-success">
-                        <strong>Pago Procesado:</strong><br>
-                        • Tarjeta terminada en: ****${ultimosDigitos}<br>
-                        • Monto: S/ ${datosUltimoPedido.calculos?.total || '0.00'}<br>
-                        • Estado: Aprobado
-                    </div>
-                </div>
-            `;
-            break;
-            
-        default:
-            contenidoHTML = '<p>Método de pago no especificado</p>';
-    }
-    
-    metodoPagoContainer.innerHTML = contenidoHTML;
-    console.log('✅ Método de pago mostrado');
-}
-
-// ==================== 6. MOSTRAR RESUMEN DE PRODUCTOS ====================
-function mostrarResumenProductos() {
-    console.log('🛒 Mostrando resumen de productos...');
-    
-    const contenedor = document.getElementById('productos-pedido');
-    if (!contenedor) {
-        console.warn('⚠️ No se encontró contenedor de productos');
-        return;
-    }
-    
-    const productos = datosUltimoPedido.carrito || [];
-    console.log('📦 Productos en el pedido:', productos);
-    
-    if (productos.length === 0) {
-        contenedor.innerHTML = '<p>No hay productos en este pedido</p>';
-        return;
-    }
-    
-    let html = `
-        <table class="table table-hover">
-            <thead class="table-light">
-                <tr>
-                    <th>Producto</th>
-                    <th class="text-center">Cantidad</th>
-                    <th class="text-end">Precio Unit.</th>
-                    <th class="text-end">Subtotal</th>
-                </tr>
-            </thead>
-            <tbody>
-    `;
-    
-    productos.forEach(producto => {
-        const subtotal = (producto.precio * producto.cantidad).toFixed(2);
-        html += `
-            <tr>
-                <td>
-                    <div class="d-flex align-items-center">
-                        <img src="${producto.imagen || 'https://via.placeholder.com/50x50?text=Producto'}" 
-                             alt="${producto.nombre}" 
-                             class="me-3" style="width: 50px; height: 50px; object-fit: cover; border-radius: 4px;">
-                        <div>
-                            <h6 class="mb-1">${producto.nombre}</h6>
-                            <small class="text-muted">${producto.marca || ''}</small>
-                        </div>
-                    </div>
-                </td>
-                <td class="text-center">${producto.cantidad}</td>
-                <td class="text-end">S/ ${producto.precio.toFixed(2)}</td>
-                <td class="text-end">S/ ${subtotal}</td>
-            </tr>
-        `;
-    });
-    
-    html += `
-            </tbody>
-        </table>
-    `;
-    
-    contenedor.innerHTML = html;
-    console.log('✅ Productos mostrados');
-}
-
-// ==================== 7. MOSTRAR TOTALES ====================
-function mostrarTotales() {
-    console.log('💰 Mostrando totales...');
-    
-    const calculos = datosUltimoPedido.calculos || {};
-    console.log('💰 Cálculos disponibles:', calculos);
-    
-    const totales = {
-        'subtotal-confirmacion': `S/ ${calculos.subtotal || '0.00'}`,
-        'envio-confirmacion': `S/ ${calculos.envio || '0.00'}`,
-        'igv-confirmacion': `S/ ${calculos.igv || '0.00'}`,
-        'total-confirmacion': `S/ ${calculos.total || '0.00'}`
-    };
-    
-    for (const [id, valor] of Object.entries(totales)) {
-        const elemento = document.getElementById(id);
-        if (elemento) {
-            elemento.textContent = valor;
-            console.log(`✅ ${id}: ${valor}`);
-        } else {
-            console.warn(`⚠️ No se encontró elemento con ID: ${id}`);
-        }
-    }
-}
-
-// ==================== 8. GENERAR EMAIL SIMULADO ====================
-function generarEmailSimulado() {
-    console.log('📧 Generando email simulado...');
-    
-    const emailContainer = document.getElementById('email-content');
-    if (!emailContainer) {
-        console.warn('⚠️ No se encontró contenedor de email');
-        return;
-    }
-    
-    const metodoPago = datosUltimoPedido['metodo-pago'] || 'contraentrega';
-    
-    const emailHTML = `
-        <div class="email-header">
-            <h5>📧 Confirmación de Pedido - ElectroHogar</h5>
-            <hr>
-        </div>
-        
-        <div class="email-body">
-            <p><strong>De:</strong> noreply@electrohogar.com</p>
-            <p><strong>Para:</strong> ${datosUltimoPedido.email || 'cliente@email.com'}</p>
-            <p><strong>Asunto:</strong> Confirmación de Pedido #${datosUltimoPedido.numeroPedido}</p>
-            <hr>
-            
-            <h6>Estimado/a ${datosUltimoPedido.nombre || 'Cliente'},</h6>
-            
-            <p>Gracias por tu compra en ElectroHogar. Tu pedido <strong>#${datosUltimoPedido.numeroPedido}</strong> ha sido recibido.</p>
-            
-            <h6>📦 Resumen del Pedido:</h6>
-            <ul>
-                ${generarListaProductosEmail()}
-            </ul>
-            
-            <p><strong>💰 Total: S/ ${datosUltimoPedido.calculos?.total || '0.00'}</strong></p>
-            
-            <h6>💳 Información de Pago:</h6>
-            ${generarInstruccionesPagoEmail(metodoPago)}
-            
-            <p>¡Gracias por elegirnos!</p>
-            <p><strong>El equipo de ElectroHogar</strong></p>
-        </div>
-    `;
-    
-    emailContainer.innerHTML = emailHTML;
-    console.log('✅ Email simulado generado');
-}
-
-function generarListaProductosEmail() {
-    const productos = datosUltimoPedido.carrito || [];
-    let lista = '';
-    
-    productos.forEach(producto => {
-        lista += `<li>${producto.cantidad}x ${producto.nombre} - S/ ${(producto.precio * producto.cantidad).toFixed(2)}</li>`;
-    });
-    
-    return lista || '<li>No hay productos</li>';
-}
-
-function generarInstruccionesPagoEmail(metodoPago) {
-    switch(metodoPago) {
-        case 'yape':
             return `
-                <p>Para completar tu pago mediante Yape:</p>
+                <p>Tu pedido se pagará contra entrega.</p>
                 <ul>
-                    <li>Envía S/ ${datosUltimoPedido.calculos?.total || '0.00'} al número: <strong>987-654-321</strong></li>
-                    <li>Concepto: <strong>Pedido #${datosUltimoPedido.numeroPedido}</strong></li>
-                    <li>Envía captura del voucher por WhatsApp</li>
+                    <li>Podrás pagar en efectivo o con tarjeta al recibir tu pedido</li>
+                    <li>El repartidor llevará un datáfono para pagos con tarjeta</li>
                 </ul>
             `;
         case 'transferencia':
             return `
-                <p>Datos para transferencia bancaria:</p>
+                <p>Realizarás el pago por transferencia bancaria.</p>
                 <ul>
-                    <li>Banco: Banco de Crédito del Perú (BCP)</li>
-                    <li>Cuenta: 285-90876543-2-10</li>
-                    <li>CCI: 00228590876543210165</li>
-                    <li>Titular: ElectroHogar SAC</li>
-                </ul>
-            `;
-        case 'contraentrega':
-            return `
-                <p>Pago contra entrega:</p>
-                <ul>
-                    <li>Pagarás en efectivo al recibir tu pedido</li>
-                    <li>Monto: S/ ${datosUltimoPedido.calculos?.total || '0.00'}</li>
-                    <li>Prepara el monto exacto</li>
+                    <li>Recibirás los datos bancarios por correo</li>
+                    <li>Tu pedido se procesará al confirmar el pago</li>
                 </ul>
             `;
         case 'tarjeta':
@@ -432,6 +169,224 @@ function generarInstruccionesPagoEmail(metodoPago) {
     }
 }
 
+// ==================== 6. MOSTRAR RESUMEN DE PRODUCTOS ====================
+function mostrarResumenProductos() {
+    console.log('📦 Mostrando resumen de productos...');
+    
+    const contenedor = document.getElementById('productos-confirmacion');
+    if (!contenedor) {
+        console.warn('⚠️ No se encontró contenedor de productos');
+        return;
+    }
+    
+    const carrito = datosUltimoPedido.carrito || [];
+    
+    if (carrito.length === 0) {
+        contenedor.innerHTML = '<p class="text-muted">No hay productos en el pedido.</p>';
+        return;
+    }
+    
+    let html = '';
+    carrito.forEach(producto => {
+        const subtotal = (producto.precio * producto.cantidad).toFixed(2);
+        html += `
+            <div class="producto-confirmacion mb-3 p-3 border rounded">
+                <div class="row align-items-center">
+                    <div class="col-md-8">
+                        <h6 class="mb-1">${producto.nombre}</h6>
+                        <small class="text-muted">
+                            Cantidad: ${producto.cantidad} x S/ ${producto.precio.toFixed(2)}
+                        </small><br>
+                        <small class="text-success">🏷️ IGV incluido en el precio</small>
+                    </div>
+                    <div class="col-md-4 text-end">
+                        <strong>S/ ${subtotal}</strong>
+                    </div>
+                </div>
+            </div>
+        `;
+    });
+    
+    contenedor.innerHTML = html;
+    console.log(`✅ ${carrito.length} productos mostrados`);
+}
+
+// ==================== 7. MOSTRAR TOTALES CORREGIDOS ====================
+function mostrarTotales() {
+    console.log('💰 Mostrando totales...');
+    
+    const calculos = datosUltimoPedido.calculos || {};
+    console.log('💰 Cálculos disponibles:', calculos);
+    
+    // 🔧 SOLUCIÓN: Mostrar IGV como incluido, no adicional
+    const subtotal = parseFloat(calculos.subtotal || 0);
+    const envio = parseFloat(calculos.envio || 0);
+    const total = parseFloat(calculos.total || 0);
+    
+    // Calcular IGV incluido (no adicional)
+    const baseImponible = subtotal / 1.18;
+    const igvIncluido = subtotal - baseImponible;
+    
+    const totales = {
+        'subtotal-confirmacion': `S/ ${subtotal.toFixed(2)}`,
+        'envio-confirmacion': envio > 0 ? `S/ ${envio.toFixed(2)}` : 'Gratis',
+        'igv-confirmacion': `S/ ${igvIncluido.toFixed(2)} (incluido)`,
+        'total-confirmacion': `S/ ${total.toFixed(2)}`
+    };
+    
+    for (const [id, valor] of Object.entries(totales)) {
+        const elemento = document.getElementById(id);
+        if (elemento) {
+            elemento.innerHTML = valor;
+            console.log(`✅ ${id}: ${valor}`);
+        } else {
+            console.warn(`⚠️ No se encontró elemento con ID: ${id}`);
+        }
+    }
+    
+    // Mostrar desglose detallado del IGV
+    mostrarDesgloseIGV(baseImponible, igvIncluido, subtotal);
+}
+
+// 🔧 NUEVA FUNCIÓN: Mostrar desglose del IGV incluido
+function mostrarDesgloseIGV(baseImponible, igvIncluido, subtotal) {
+    const contenedor = document.querySelector('.total-line.total-final').parentElement;
+    if (!contenedor) return;
+    
+    // Buscar o crear contenedor de desglose
+    let desgloseContainer = document.getElementById('desglose-igv-confirmacion');
+    if (!desgloseContainer) {
+        desgloseContainer = document.createElement('div');
+        desgloseContainer.id = 'desglose-igv-confirmacion';
+        desgloseContainer.className = 'mt-3 p-3 bg-light rounded';
+        contenedor.appendChild(desgloseContainer);
+    }
+    
+    desgloseContainer.innerHTML = `
+        <h6 class="mb-2">📊 Desglose Detallado del IGV</h6>
+        <div class="row small">
+            <div class="col-6">
+                <div>Base imponible:</div>
+                <div>IGV (18%):</div>
+                <div><strong>Subtotal:</strong></div>
+            </div>
+            <div class="col-6 text-end">
+                <div>S/ ${baseImponible.toFixed(2)}</div>
+                <div>S/ ${igvIncluido.toFixed(2)}</div>
+                <div><strong>S/ ${subtotal.toFixed(2)}</strong></div>
+            </div>
+        </div>
+        <hr class="my-2">
+        <small class="text-success">
+            ✅ Todos los precios mostrados incluyen IGV del 18%
+        </small>
+    `;
+}
+
+// ==================== 8. GENERAR EMAIL SIMULADO ====================
+function generarEmailSimulado() {
+    console.log('📧 Generando email simulado...');
+    
+    const emailContainer = document.getElementById('email-content');
+    if (!emailContainer) {
+        console.warn('⚠️ No se encontró contenedor de email');
+        return;
+    }
+    
+    const metodoPago = datosUltimoPedido['metodo-pago'] || 'contraentrega';
+    const calculos = datosUltimoPedido.calculos || {};
+    
+    const emailHTML = `
+        <div class="email-header">
+            <h5>📧 Confirmación de Pedido - ElectroHogar</h5>
+            <hr>
+        </div>
+        
+        <div class="email-body">
+            <p><strong>De:</strong> noreply@electrohogar.com</p>
+            <p><strong>Para:</strong> ${datosUltimoPedido.email || 'cliente@email.com'}</p>
+            <p><strong>Asunto:</strong> Confirmación de Pedido #${datosUltimoPedido.numeroPedido}</p>
+            <hr>
+            
+            <h6>Estimado/a ${datosUltimoPedido.nombre || 'Cliente'},</h6>
+            
+            <p>Gracias por tu compra en ElectroHogar. Tu pedido ha sido confirmado y está siendo procesado.</p>
+            
+            <div class="pedido-details">
+                <h6>📦 Detalles del Pedido:</h6>
+                <ul>
+                    <li><strong>Número:</strong> ${datosUltimoPedido.numeroPedido}</li>
+                    <li><strong>Fecha:</strong> ${datosUltimoPedido.fecha}</li>
+                    <li><strong>Total:</strong> S/ ${calculos.total || '0.00'} (IGV incluido)</li>
+                    <li><strong>Método de pago:</strong> ${obtenerNombreMetodoPago(metodoPago)}</li>
+                </ul>
+            </div>
+            
+            <div class="productos-email">
+                <h6>🛒 Productos:</h6>
+                ${generarListaProductosEmail()}
+            </div>
+            
+            <div class="totales-email mt-3">
+                <h6>💰 Resumen de Costos:</h6>
+                <div class="row">
+                    <div class="col-6">
+                        <small>Subtotal (IGV incluido):</small><br>
+                        <small>Envío:</small><br>
+                        <small><strong>Total final:</strong></small>
+                    </div>
+                    <div class="col-6 text-end">
+                        <small>S/ ${calculos.subtotal || '0.00'}</small><br>
+                        <small>${parseFloat(calculos.envio || 0) > 0 ? 'S/ ' + calculos.envio : 'Gratis'}</small><br>
+                        <small><strong>S/ ${calculos.total || '0.00'}</strong></small>
+                    </div>
+                </div>
+                <small class="text-muted d-block mt-2">
+                    ℹ️ Todos los precios incluyen IGV del 18%
+                </small>
+            </div>
+            
+            <hr>
+            <p><small>
+                Este es un correo automático de confirmación. 
+                <br>Para consultas, contáctanos al +51 987 654 321 o info@electrohogar.com
+            </small></p>
+        </div>
+    `;
+    
+    emailContainer.innerHTML = emailHTML;
+    console.log('✅ Email simulado generado');
+}
+
+function obtenerNombreMetodoPago(metodo) {
+    switch(metodo) {
+        case 'contraentrega': return 'Pago contra entrega';
+        case 'transferencia': return 'Transferencia bancaria';
+        case 'tarjeta': return 'Tarjeta de crédito/débito';
+        default: return 'Método no especificado';
+    }
+}
+
+function generarListaProductosEmail() {
+    const carrito = datosUltimoPedido.carrito || [];
+    if (carrito.length === 0) return '<p>No hay productos.</p>';
+    
+    let html = '<ul>';
+    carrito.forEach(producto => {
+        const subtotal = (producto.precio * producto.cantidad).toFixed(2);
+        html += `
+            <li>
+                ${producto.nombre} - 
+                Cantidad: ${producto.cantidad} x S/ ${producto.precio.toFixed(2)} = 
+                <strong>S/ ${subtotal}</strong>
+            </li>
+        `;
+    });
+    html += '</ul>';
+    
+    return html;
+}
+
 // ==================== FUNCIÓN DE DEBUG ====================
 function debugConfirmacion() {
     console.log('🔍 DEBUG CONFIRMACIÓN:');
@@ -444,11 +399,11 @@ function debugConfirmacion() {
         documento: datosUltimoPedido?.documento
     });
     console.log('🛒 Productos:', datosUltimoPedido?.carrito);
-    console.log('💰 Cálculos:', datosUltimoPedido?.calculos);
+    console.log('💰 Cálculos (IGV incluido):', datosUltimoPedido?.calculos);
 }
 
 // Hacer función de debug disponible globalmente
 window.debugConfirmacion = debugConfirmacion;
 
-console.log('✅ Módulo de confirmación cargado');
+console.log('✅ Módulo de confirmación corregido cargado - IGV incluido en precios');
 console.log('💡 Usa debugConfirmacion() en la consola para ver todos los datos');

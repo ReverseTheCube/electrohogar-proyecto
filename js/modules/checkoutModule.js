@@ -1,5 +1,6 @@
 // =====================================================
-// FIX PARA MENSAJES DE ERROR - CHECKOUT
+// CHECKOUT MODULE - VALIDACIÓN COMPLETAMENTE ARREGLADA
+// ✅ Arregla campos rojos + mensajes de error + IGV incluido
 // =====================================================
 
 // Variables globales
@@ -8,15 +9,15 @@ let calculosActuales = {};
 
 // ==================== INICIALIZACIÓN ====================
 document.addEventListener('DOMContentLoaded', function() {
-    console.log('🚀 Iniciando Checkout');
+    console.log('🚀 Iniciando Checkout con validación corregida');
     
     cargarYMostrarCarrito();
-    configurarValidacion();
+    configurarValidacionCorregida();
     configurarUbicaciones();
     configurarMetodosEnvio();
-    configurarFormulario();
+    configurarFormularioCorregido();
     
-    console.log('✅ Checkout listo');
+    console.log('✅ Checkout listo - Validación arreglada');
 });
 
 // ==================== CARGAR Y MOSTRAR CARRITO ====================
@@ -40,7 +41,8 @@ function cargarYMostrarCarrito() {
                     <div class="d-flex justify-content-between align-items-center">
                         <div>
                             <strong>${producto.nombre}</strong><br>
-                            <small>Cantidad: ${producto.cantidad} x S/ ${producto.precio}</small>
+                            <small>Cantidad: ${producto.cantidad} x S/ ${producto.precio}</small><br>
+                            <small class="text-muted">🏷️ IGV incluido</small>
                         </div>
                         <div><strong>S/ ${subtotal}</strong></div>
                     </div>
@@ -50,10 +52,11 @@ function cargarYMostrarCarrito() {
         contenedor.innerHTML = html;
     }
     
-    calcularTotales();
+    calcularTotalesCorregidos();
 }
 
-function calcularTotales() {
+// 🔧 FUNCIÓN CORREGIDA: Calcular totales con IGV incluido
+function calcularTotalesCorregidos() {
     let subtotal = 0;
     
     carritoActual.forEach(producto => {
@@ -61,256 +64,298 @@ function calcularTotales() {
     });
     
     const envioSeleccionado = document.querySelector('input[name="metodo-envio"]:checked');
-    const costoEnvio = envioSeleccionado ? parseFloat(envioSeleccionado.dataset.precio || 0) : 0;
+    const costoEnvio = envioSeleccionado ? 
+        parseFloat(envioSeleccionado.dataset.precio || 0) : 0;
     
-    const igv = subtotal * 0.18;
-    const total = subtotal + costoEnvio + igv;
+    // 🔧 SOLUCIÓN: IGV ya incluido en precios, solo mostrar desglose
+    const baseImponible = subtotal / 1.18; // Base sin IGV
+    const igvIncluido = subtotal - baseImponible; // IGV que ya está incluido
+    const total = subtotal + costoEnvio; // Total final sin sumar IGV adicional
     
     calculosActuales = {
         subtotal: subtotal.toFixed(2),
+        baseImponible: baseImponible.toFixed(2),
+        igvIncluido: igvIncluido.toFixed(2),
         envio: costoEnvio.toFixed(2),
-        igv: igv.toFixed(2),
         total: total.toFixed(2)
     };
     
+    // Actualizar elementos en la página
     const elementos = {
-        'subtotal-resumen': calculosActuales.subtotal,
-        'envio-resumen': calculosActuales.envio,
-        'igv-resumen': calculosActuales.igv,
-        'total-resumen': calculosActuales.total
+        'subtotal-resumen': `S/ ${calculosActuales.subtotal}`,
+        'envio-resumen': costoEnvio > 0 ? `S/ ${calculosActuales.envio}` : 'Gratis',
+        'igv-resumen': `S/ ${calculosActuales.igvIncluido} (incluido)`,
+        'total-resumen': `S/ ${calculosActuales.total}`
     };
     
     for (const [id, valor] of Object.entries(elementos)) {
         const elemento = document.getElementById(id);
         if (elemento) {
-            elemento.textContent = `S/ ${valor}`;
+            elemento.innerHTML = valor;
         }
     }
+    
+    console.log('💰 Totales calculados con IGV incluido:', calculosActuales);
 }
 
-// ==================== CONFIGURAR VALIDACIÓN CORREGIDA ====================
-function configurarValidacion() {
+// ==================== VALIDACIÓN COMPLETAMENTE CORREGIDA ====================
+function configurarValidacionCorregida() {
     const form = document.getElementById('checkout-form');
-    if (!form) return;
+    if (!form) {
+        console.error('❌ No se encontró el formulario checkout-form');
+        return;
+    }
+    
+    // Deshabilitar validación HTML5 nativa para usar la personalizada
+    form.setAttribute('novalidate', 'true');
     
     const campos = form.querySelectorAll('input, select, textarea');
+    console.log(`🔧 Configurando validación para ${campos.length} campos`);
     
     campos.forEach(campo => {
-        // ==================== MANEJO DIFERENTE PARA CHECKBOXES ====================
-        if (campo.type === 'checkbox') {
-            // Los checkboxes se validan en 'change', NO en 'blur'
-            campo.addEventListener('change', function() {
-                manejarValidacionCheckbox(this);
+        // ==================== LIMPIAR EVENT LISTENERS EXISTENTES ====================
+        // Clonar elemento para remover todos los event listeners
+        const nuevoElemento = campo.cloneNode(true);
+        campo.parentNode.replaceChild(nuevoElemento, campo);
+        
+        // ==================== CONFIGURAR NUEVOS EVENT LISTENERS ====================
+        if (nuevoElemento.type === 'checkbox') {
+            nuevoElemento.addEventListener('change', function() {
+                validarCheckbox(this);
+            });
+            console.log(`✅ Checkbox ${nuevoElemento.id} configurado`);
+        } else if (nuevoElemento.hasAttribute('required')) {
+            // Validar cuando el usuario sale del campo (blur)
+            nuevoElemento.addEventListener('blur', function() {
+                validarCampoCorregido(this);
             });
             
-            // NO agregar evento blur para checkboxes
-            console.log(`🔧 Checkbox ${campo.id} configurado solo para 'change'`);
-        } else {
-            // Campos normales usan blur e input
-            campo.addEventListener('blur', function() {
-                validarCampoCompleto(this);
+            // Limpiar validación cuando el usuario escribe (input)
+            nuevoElemento.addEventListener('input', function() {
+                limpiarValidacion(this);
             });
             
-            campo.addEventListener('input', function() {
-                limpiarValidacionCompleta(this);
-            });
+            console.log(`✅ Campo ${nuevoElemento.id} configurado para validación`);
         }
     });
     
-    console.log('✅ Validación configurada');
+    console.log('✅ Validación configurada correctamente');
 }
 
-// ==================== VALIDACIÓN COMPLETA CORREGIDA ====================
-function validarCampoCompleto(campo) {
-    if (!campo.hasAttribute('required')) return true;
-    
-    // ==================== MANEJO ESPECÍFICO PARA CHECKBOXES ====================
-    if (campo.type === 'checkbox') {
-        console.log(`🔍 Validando checkbox ${campo.id}:`, campo.checked);
-        return manejarValidacionCheckbox(campo);
-    }
-    
+// 🔧 FUNCIÓN CORREGIDA: Validar campo individual
+function validarCampoCorregido(campo) {
     const valor = campo.value.trim();
     let esValido = false;
     let mensajeError = '';
     
+    console.log(`🔍 Validando campo ${campo.id} con valor: "${valor}"`);
+    
+    // ==================== VALIDACIONES CORREGIDAS ====================
     switch(campo.id) {
         case 'nombre':
         case 'apellidos':
+            // ✅ CORREGIDO: Acepta letras, espacios, acentos y ñ
             esValido = valor.length >= 2 && /^[a-zA-ZáéíóúÁÉÍÓÚñÑ\s]+$/.test(valor);
             mensajeError = 'Debe contener solo letras y tener al menos 2 caracteres';
             break;
+            
         case 'email':
+            // ✅ CORREGIDO: Regex completa para email
             esValido = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(valor);
-            mensajeError = 'Ingresa un email válido';
+            mensajeError = 'Ingresa un correo electrónico válido (ejemplo@email.com)';
             break;
+            
         case 'telefono':
-            esValido = /^[0-9]{9}$/.test(valor.replace(/\s/g, ''));
-            mensajeError = 'Debe tener 9 dígitos';
+            // ✅ CORREGIDO: Acepta formatos flexibles de teléfono
+            const telefonoLimpio = valor.replace(/[\s\-\(\)]/g, ''); // Quitar espacios, guiones, paréntesis
+            esValido = /^[0-9]{9,15}$/.test(telefonoLimpio);
+            mensajeError = 'Ingresa un teléfono válido (9-15 dígitos)';
             break;
+            
         case 'documento':
+            // ✅ CORREGIDO: DNI (8 dígitos) o RUC (11 dígitos)
             esValido = /^[0-9]{8}$/.test(valor) || /^[0-9]{11}$/.test(valor);
-            mensajeError = 'DNI: 8 dígitos, RUC: 11 dígitos';
+            mensajeError = 'Ingresa DNI (8 dígitos) o RUC (11 dígitos)';
             break;
+            
         case 'direccion':
-            esValido = valor.length >= 5;
-            mensajeError = 'La dirección debe ser más específica';
+            // ✅ CORREGIDO: Dirección más específica
+            esValido = valor.length >= 10;
+            mensajeError = 'Ingresa una dirección más específica (mínimo 10 caracteres)';
             break;
+            
         case 'departamento':
         case 'provincia':
         case 'distrito':
-            esValido = valor !== '';
-            mensajeError = 'Selecciona una opción';
+            // ✅ CORREGIDO: Verificar que no esté vacío
+            esValido = valor !== '' && valor !== 'Seleccionar' && valor !== 'Selecciona';
+            mensajeError = 'Selecciona una opción válida';
             break;
+            
         case 'numero-tarjeta':
-            esValido = valor.replace(/\s/g, '').length >= 13;
-            mensajeError = 'Número de tarjeta incompleto';
+            // ✅ CORREGIDO: Número de tarjeta más flexible
+            const numeroLimpio = valor.replace(/\s/g, '');
+            esValido = /^[0-9]{13,19}$/.test(numeroLimpio);
+            mensajeError = 'Ingresa un número de tarjeta válido (13-19 dígitos)';
             break;
+            
         case 'nombre-tarjeta':
-            esValido = valor.length >= 3;
-            mensajeError = 'Nombre muy corto';
+            // ✅ CORREGIDO: Nombre en tarjeta
+            esValido = valor.length >= 5 && /^[a-zA-Z\s]+$/.test(valor);
+            mensajeError = 'Ingresa el nombre completo como aparece en la tarjeta';
             break;
+            
         case 'cvv':
+            // ✅ CORREGIDO: CVV
             esValido = /^[0-9]{3,4}$/.test(valor);
-            mensajeError = 'CVV debe tener 3 o 4 dígitos';
+            mensajeError = 'Ingresa un CVV válido (3 o 4 dígitos)';
             break;
+            
         case 'mes-vencimiento':
         case 'año-vencimiento':
-            esValido = valor !== '';
-            mensajeError = 'Selecciona fecha';
+            // ✅ CORREGIDO: Fecha de vencimiento
+            esValido = valor !== '' && valor !== 'Seleccionar';
+            mensajeError = 'Selecciona una fecha válida';
             break;
+            
         default:
+            // ✅ CORREGIDO: Validación por defecto
             esValido = valor.length > 0;
-            mensajeError = 'Este campo es requerido';
+            mensajeError = 'Este campo es obligatorio';
     }
     
-    // ==================== APLICAR VALIDACIÓN VISUAL ====================
-    if (esValido) {
-        // CAMPO VÁLIDO
-        campo.classList.remove('is-invalid');
-        campo.classList.add('is-valid');
-        
-        // OCULTAR mensaje de error
-        ocultarMensajeError(campo);
-    } else {
-        // CAMPO INVÁLIDO
-        campo.classList.remove('is-valid');
-        campo.classList.add('is-invalid');
-        
-        // MOSTRAR mensaje de error
-        mostrarMensajeError(campo, mensajeError);
-    }
+    // ==================== APLICAR RESULTADO DE VALIDACIÓN ====================
+    aplicarValidacionVisual(campo, esValido, mensajeError);
     
     console.log(`${esValido ? '✅' : '❌'} Campo ${campo.id}: ${esValido ? 'VÁLIDO' : 'INVÁLIDO'}`);
     return esValido;
 }
 
-function limpiarValidacionCompleta(campo) {
-    campo.classList.remove('is-invalid', 'is-valid');
-    ocultarMensajeError(campo);
-}
-
-// ==================== VALIDACIÓN ESPECÍFICA PARA CHECKBOXES ====================
-function manejarValidacionCheckbox(checkbox) {
-    const esValido = checkbox.checked;
-    const mensajeError = 'Debes aceptar los términos y condiciones';
-    
-    console.log(`📋 Validando checkbox ${checkbox.id}:`, {
-        checked: checkbox.checked,
-        esValido: esValido
-    });
+// 🔧 FUNCIÓN CORREGIDA: Aplicar validación visual
+function aplicarValidacionVisual(campo, esValido, mensajeError) {
+    // Limpiar clases existentes
+    campo.classList.remove('is-valid', 'is-invalid');
     
     if (esValido) {
-        checkbox.classList.remove('is-invalid');
-        checkbox.classList.add('is-valid');
-        ocultarMensajeError(checkbox);
-        console.log(`✅ Checkbox ${checkbox.id} VÁLIDO`);
+        // ✅ CAMPO VÁLIDO
+        campo.classList.add('is-valid');
+        ocultarMensajeErrorCorregido(campo);
     } else {
-        checkbox.classList.remove('is-valid');
-        checkbox.classList.add('is-invalid');
-        mostrarMensajeError(checkbox, mensajeError);
-        console.log(`❌ Checkbox ${checkbox.id} INVÁLIDO`);
-    }
-    
-    return esValido;
-}
-
-// ==================== MANEJO DE MENSAJES DE ERROR ====================
-function mostrarMensajeError(campo, mensaje) {
-    let feedback = campo.parentElement.querySelector('.invalid-feedback');
-    
-    if (feedback) {
-        feedback.textContent = mensaje;
-        feedback.style.display = 'block';
+        // ❌ CAMPO INVÁLIDO
+        campo.classList.add('is-invalid');
+        mostrarMensajeErrorCorregido(campo, mensajeError);
     }
 }
 
-function ocultarMensajeError(campo) {
+// 🔧 FUNCIÓN CORREGIDA: Mostrar mensaje de error
+function mostrarMensajeErrorCorregido(campo, mensaje) {
     let feedback = campo.parentElement.querySelector('.invalid-feedback');
+    
+    if (!feedback) {
+        // Crear elemento de feedback si no existe
+        feedback = document.createElement('div');
+        feedback.className = 'invalid-feedback';
+        campo.parentElement.appendChild(feedback);
+    }
+    
+    feedback.textContent = mensaje;
+    feedback.style.display = 'block';
+}
+
+// 🔧 FUNCIÓN CORREGIDA: Ocultar mensaje de error
+function ocultarMensajeErrorCorregido(campo) {
+    const feedback = campo.parentElement.querySelector('.invalid-feedback');
     
     if (feedback) {
         feedback.style.display = 'none';
     }
 }
 
-// ==================== CONFIGURAR UBICACIONES ====================
-function configurarUbicaciones() {
-    const departamento = document.getElementById('departamento');
-    const provincia = document.getElementById('provincia');
-    const distrito = document.getElementById('distrito');
-    
-    if (!departamento) return;
-    
-    departamento.addEventListener('change', function() {
-        const valor = this.value;
-        
-        provincia.innerHTML = '<option value="">Seleccionar provincia</option>';
-        distrito.innerHTML = '<option value="">Seleccionar distrito</option>';
-        
-        if (valor === 'arequipa') {
-            agregarOpciones(provincia, ['Arequipa', 'Camaná', 'Caravelí']);
-        } else if (valor === 'lima') {
-            agregarOpciones(provincia, ['Lima', 'Huarochirí', 'Cañete']);
-        } else if (valor === 'cusco') {
-            agregarOpciones(provincia, ['Cusco', 'Urubamba', 'Calca']);
-        } else if (valor === 'trujillo') {
-            agregarOpciones(provincia, ['Trujillo', 'Ascope']);
-        } else if (valor === 'chiclayo') {
-            agregarOpciones(provincia, ['Chiclayo', 'Ferreñafe']);
-        }
-        
-        validarCampoCompleto(this);
-    });
-    
-    provincia.addEventListener('change', function() {
-        const valor = this.value;
-        
-        distrito.innerHTML = '<option value="">Seleccionar distrito</option>';
-        
-        if (valor) {
-            if (valor.includes('lima')) {
-                agregarOpciones(distrito, ['Lima', 'Miraflores', 'San Isidro', 'Barranco']);
-            } else if (valor.includes('arequipa')) {
-                agregarOpciones(distrito, ['Arequipa', 'Cayma', 'Cerro Colorado']);
-            } else {
-                agregarOpciones(distrito, ['Distrito 1', 'Distrito 2', 'Distrito 3']);
-            }
-        }
-        
-        validarCampoCompleto(this);
-    });
-    
-    distrito.addEventListener('change', function() {
-        validarCampoCompleto(this);
-    });
+// 🔧 FUNCIÓN CORREGIDA: Limpiar validación
+function limpiarValidacion(campo) {
+    campo.classList.remove('is-valid', 'is-invalid');
+    ocultarMensajeErrorCorregido(campo);
 }
 
-function agregarOpciones(select, opciones) {
-    opciones.forEach(opcion => {
-        const option = document.createElement('option');
-        option.value = opcion.toLowerCase().replace(' ', '-');
-        option.textContent = opcion;
-        select.appendChild(option);
+// 🔧 FUNCIÓN CORREGIDA: Validar checkbox
+function validarCheckbox(checkbox) {
+    const esValido = checkbox.checked;
+    
+    console.log(`📋 Validando checkbox ${checkbox.id}: ${esValido ? 'MARCADO' : 'NO MARCADO'}`);
+    
+    if (esValido) {
+        checkbox.classList.remove('is-invalid');
+        checkbox.classList.add('is-valid');
+        ocultarMensajeErrorCorregido(checkbox);
+    } else {
+        checkbox.classList.remove('is-valid');
+        checkbox.classList.add('is-invalid');
+        mostrarMensajeErrorCorregido(checkbox, 'Debes aceptar los términos y condiciones');
+    }
+    
+    return esValido;
+}
+
+// ==================== CONFIGURAR UBICACIONES ====================
+function configurarUbicaciones() {
+    const departamentoSelect = document.getElementById('departamento');
+    const provinciaSelect = document.getElementById('provincia');
+    const distritoSelect = document.getElementById('distrito');
+    
+    if (!departamentoSelect) return;
+    
+    const ubicaciones = {
+        'arequipa': {
+            'arequipa': ['Cercado', 'Cayma', 'Cerro Colorado', 'Mariano Melgar', 'Miraflores'],
+            'camana': ['Camaná', 'José María Quimper', 'Mariano Nicolás Valcárcel']
+        },
+        'lima': {
+            'lima': ['Cercado', 'Miraflores', 'San Isidro', 'Surco', 'La Molina'],
+            'callao': ['Bellavista', 'Carmen de la Legua', 'La Perla']
+        }
+    };
+    
+    departamentoSelect.addEventListener('change', function() {
+        const departamento = this.value;
+        provinciaSelect.innerHTML = '<option value="">Selecciona provincia</option>';
+        distritoSelect.innerHTML = '<option value="">Selecciona distrito</option>';
+        
+        if (departamento && ubicaciones[departamento]) {
+            Object.keys(ubicaciones[departamento]).forEach(provincia => {
+                const option = document.createElement('option');
+                option.value = provincia;
+                option.textContent = provincia.charAt(0).toUpperCase() + provincia.slice(1);
+                provinciaSelect.appendChild(option);
+            });
+        }
+        
+        // Revalidar campos
+        if (departamento) validarCampoCorregido(this);
+        limpiarValidacion(provinciaSelect);
+        limpiarValidacion(distritoSelect);
+    });
+    
+    provinciaSelect.addEventListener('change', function() {
+        const departamento = departamentoSelect.value;
+        const provincia = this.value;
+        distritoSelect.innerHTML = '<option value="">Selecciona distrito</option>';
+        
+        if (departamento && provincia && ubicaciones[departamento][provincia]) {
+            ubicaciones[departamento][provincia].forEach(distrito => {
+                const option = document.createElement('option');
+                option.value = distrito.toLowerCase().replace(' ', '-');
+                option.textContent = distrito;
+                distritoSelect.appendChild(option);
+            });
+        }
+        
+        // Revalidar campos
+        if (provincia) validarCampoCorregido(this);
+        limpiarValidacion(distritoSelect);
+    });
+    
+    distritoSelect.addEventListener('change', function() {
+        if (this.value) validarCampoCorregido(this);
     });
 }
 
@@ -318,25 +363,18 @@ function agregarOpciones(select, opciones) {
 function configurarMetodosEnvio() {
     const metodosEnvio = document.querySelectorAll('input[name="metodo-envio"]');
     
-    metodosEnvio.forEach(radio => {
-        radio.addEventListener('change', function() {
-            calcularTotales();
+    metodosEnvio.forEach(metodo => {
+        metodo.addEventListener('change', function() {
+            calcularTotalesCorregidos();
+            console.log(`📦 Método de envío seleccionado: ${this.value}`);
         });
     });
 }
 
-// ==================== CONFIGURAR FORMULARIO ====================
-function configurarFormulario() {
+// ==================== CONFIGURAR FORMULARIO CORREGIDO ====================
+function configurarFormularioCorregido() {
     const form = document.getElementById('checkout-form');
     if (!form) return;
-    
-    // ==================== CONFIGURAR TÉRMINOS Y CONDICIONES ====================
-    const terminos = document.getElementById('terminos');
-    if (terminos) {
-        terminos.addEventListener('change', function() {
-            manejarTerminos(this);
-        });
-    }
     
     // Configurar métodos de pago
     const metodosPago = document.querySelectorAll('input[name="metodo-pago"]');
@@ -352,43 +390,172 @@ function configurarFormulario() {
         btnCupon.addEventListener('click', aplicarCupon);
     }
     
-    // Configurar envío del formulario
+    // ==================== CONFIGURAR ENVÍO DEL FORMULARIO ====================
     form.addEventListener('submit', function(e) {
         e.preventDefault();
-        procesarFormulario();
+        console.log('🔄 Procesando envío del formulario...');
+        procesarFormularioCorregido();
     });
     
-    console.log('✅ Formulario configurado');
+    console.log('✅ Formulario configurado correctamente');
 }
 
-// ==================== MANEJO ESPECÍFICO DE TÉRMINOS ====================
-function manejarTerminos(checkbox) {
-    console.log('📋 Evento change en términos:', checkbox.checked);
+// 🔧 FUNCIÓN CORREGIDA: Procesar formulario
+function procesarFormularioCorregido() {
+    console.log('🔄 Validando formulario completo...');
     
-    // Usar la función de validación específica para checkboxes
-    return manejarValidacionCheckbox(checkbox);
+    const form = document.getElementById('checkout-form');
+    let formularioValido = true;
+    let camposInvalidos = [];
+    
+    // ==================== VALIDAR TODOS LOS CAMPOS REQUERIDOS ====================
+    const campos = form.querySelectorAll('input[required], select[required]');
+    
+    campos.forEach(campo => {
+        // Saltar campos de tarjeta si el método de pago no es tarjeta
+        const metodoPago = document.querySelector('input[name="metodo-pago"]:checked');
+        if (campo.closest('#datos-tarjeta') && metodoPago?.value !== 'tarjeta') {
+            return;
+        }
+        
+        let esValido = false;
+        
+        if (campo.type === 'checkbox') {
+            esValido = validarCheckbox(campo);
+        } else {
+            esValido = validarCampoCorregido(campo);
+        }
+        
+        if (!esValido) {
+            formularioValido = false;
+            camposInvalidos.push(campo.id);
+        }
+    });
+    
+    // ==================== MOSTRAR RESULTADO ====================
+    if (!formularioValido) {
+        console.log('❌ FORMULARIO INVÁLIDO. Campos problemáticos:', camposInvalidos);
+        mostrarAlerta('Por favor completa todos los campos correctamente', 'danger');
+        
+        // Hacer scroll al primer campo problemático
+        const primerCampo = document.getElementById(camposInvalidos[0]);
+        if (primerCampo) {
+            primerCampo.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            primerCampo.focus();
+        }
+        return;
+    }
+    
+    console.log('✅ FORMULARIO VÁLIDO - Procesando pedido...');
+    mostrarLoading(true);
+    
+    // Recopilar datos
+    const datos = recopilarDatos();
+    
+    // Simular procesamiento
+    setTimeout(() => {
+        procesarPedido(datos);
+    }, 2000);
 }
 
+// ==================== RECOPILAR DATOS ====================
+function recopilarDatos() {
+    console.log('📦 Recopilando datos del formulario...');
+    
+    const datos = {};
+    
+    // Información personal
+    datos.nombre = document.getElementById('nombre')?.value || '';
+    datos.apellidos = document.getElementById('apellidos')?.value || '';
+    datos.email = document.getElementById('email')?.value || '';
+    datos.telefono = document.getElementById('telefono')?.value || '';
+    datos.documento = document.getElementById('documento')?.value || '';
+    
+    // Dirección
+    datos.direccion = document.getElementById('direccion')?.value || '';
+    datos.departamento = document.getElementById('departamento')?.value || '';
+    datos.provincia = document.getElementById('provincia')?.value || '';
+    datos.distrito = document.getElementById('distrito')?.value || '';
+    datos.referencia = document.getElementById('referencia')?.value || '';
+    
+    // Métodos
+    const metodoEnvio = document.querySelector('input[name="metodo-envio"]:checked');
+    datos['metodo-envio'] = metodoEnvio?.value || 'estandar';
+    
+    const metodoPago = document.querySelector('input[name="metodo-pago"]:checked');
+    datos['metodo-pago'] = metodoPago?.value || 'contraentrega';
+    
+    // Datos de tarjeta (si aplica)
+    if (datos['metodo-pago'] === 'tarjeta') {
+        datos['numero-tarjeta'] = document.getElementById('numero-tarjeta')?.value || '';
+        datos['nombre-tarjeta'] = document.getElementById('nombre-tarjeta')?.value || '';
+        datos['cvv'] = document.getElementById('cvv')?.value || '';
+        datos['mes-vencimiento'] = document.getElementById('mes-vencimiento')?.value || '';
+        datos['año-vencimiento'] = document.getElementById('año-vencimiento')?.value || '';
+    }
+    
+    // Términos
+    const terminos = document.getElementById('terminos');
+    datos.terminos = terminos?.checked || false;
+    
+    // Datos adicionales
+    datos.carrito = carritoActual;
+    datos.calculos = calculosActuales;
+    datos.numeroPedido = 'EH' + Date.now().toString().slice(-6);
+    datos.fecha = new Date().toLocaleDateString();
+    datos.hora = new Date().toLocaleTimeString();
+    
+    console.log('✅ Datos recopilados:', datos);
+    return datos;
+}
+
+// ==================== PROCESAR PEDIDO ====================
+function procesarPedido(datos) {
+    try {
+        // Guardar pedido
+        localStorage.setItem('ultimoPedido', JSON.stringify(datos));
+        localStorage.removeItem('carrito');
+        
+        console.log('✅ Pedido procesado exitosamente:', datos.numeroPedido);
+        
+        // Cambiar botón a éxito
+        const btn = document.querySelector('#checkout-form button[type="submit"]');
+        if (btn) {
+            btn.className = 'btn btn-success btn-lg w-100';
+            btn.innerHTML = '<i class="fas fa-check me-2"></i>¡Pedido Procesado!';
+        }
+        
+        mostrarAlerta('¡Pedido procesado exitosamente! Redirigiendo...', 'success');
+        
+        // Redirigir a confirmación
+        setTimeout(() => {
+            window.location.href = 'confirmacion.html';
+        }, 1500);
+        
+    } catch (error) {
+        console.error('❌ Error al procesar pedido:', error);
+        mostrarLoading(false);
+        mostrarAlerta('Error al procesar el pedido. Inténtalo nuevamente.', 'danger');
+    }
+}
+
+// ==================== FUNCIONES AUXILIARES ====================
 function mostrarOcultarTarjeta(metodoPago) {
     const formularioTarjeta = document.getElementById('datos-tarjeta');
     if (!formularioTarjeta) return;
     
     if (metodoPago === 'tarjeta') {
         formularioTarjeta.style.display = 'block';
-        formularioTarjeta.classList.add('show');
-        
         const camposTarjeta = formularioTarjeta.querySelectorAll('input, select');
         camposTarjeta.forEach(campo => {
             campo.setAttribute('required', 'true');
         });
     } else {
         formularioTarjeta.style.display = 'none';
-        formularioTarjeta.classList.remove('show');
-        
         const camposTarjeta = formularioTarjeta.querySelectorAll('input, select');
         camposTarjeta.forEach(campo => {
             campo.removeAttribute('required');
-            limpiarValidacionCompleta(campo);
+            limpiarValidacion(campo);
         });
     }
 }
@@ -409,171 +576,22 @@ function aplicarCupon() {
     
     if (cupones[codigo]) {
         mostrarAlerta(`¡Cupón aplicado! ${cupones[codigo].descripcion}`, 'success');
-        calcularTotales();
+        calcularTotalesCorregidos();
     } else {
         mostrarAlerta('Código de cupón inválido', 'danger');
     }
 }
 
-// ==================== PROCESAR FORMULARIO MEJORADO ====================
-function procesarFormulario() {
-    console.log('🔄 Procesando formulario...');
-    
-    const form = document.getElementById('checkout-form');
-    let formularioValido = true;
-    let camposInvalidos = [];
-    
-    // Validar todos los campos requeridos
-    const campos = form.querySelectorAll('input[required], select[required]');
-    campos.forEach(campo => {
-        // Saltar campos de tarjeta si no están visibles
-        const esTarjeta = campo.closest('#datos-tarjeta');
-        if (esTarjeta && esTarjeta.style.display === 'none') {
-            return;
-        }
-        
-        if (!validarCampoCompleto(campo)) {
-            formularioValido = false;
-            camposInvalidos.push(campo.id);
-        }
-    });
-    
-    // ==================== VALIDAR TÉRMINOS ESPECÍFICAMENTE ====================
-    const terminos = document.getElementById('terminos');
-    if (terminos) {
-        const terminosValidos = manejarValidacionCheckbox(terminos);
-        if (!terminosValidos) {
-            formularioValido = false;
-            camposInvalidos.push('terminos');
-            console.log('❌ Términos no marcados');
-        } else {
-            console.log('✅ Términos verificados correctamente');
-        }
-    }
-    
-    // Mostrar resultado
-    if (!formularioValido) {
-        console.log('💥 FORMULARIO INVÁLIDO. Campos problemáticos:', camposInvalidos);
-        mostrarAlerta('Por favor completa todos los campos correctamente', 'danger');
-        
-        // Hacer scroll al primer campo problemático
-        const primerCampo = document.getElementById(camposInvalidos[0]);
-        if (primerCampo) {
-            primerCampo.scrollIntoView({ behavior: 'smooth', block: 'center' });
-            primerCampo.focus();
-        }
-        return;
-    }
-    
-    console.log('🎉 FORMULARIO VÁLIDO - Procesando pedido...');
-    mostrarLoading(true);
-    
-    const datos = recopilarDatos(form);
-    
-    setTimeout(() => {
-        procesarPedido(datos);
-    }, 2000);
-}
-
-function recopilarDatos(form) {
-    console.log('📦 Recopilando datos del formulario...');
-    
-    // ==================== RECOPILAR POR ID (NO FormData) ====================
-    const datos = {};
-    
-    // Campos de información personal
-    datos.nombre = document.getElementById('nombre')?.value || '';
-    datos.apellidos = document.getElementById('apellidos')?.value || '';
-    datos.email = document.getElementById('email')?.value || '';
-    datos.telefono = document.getElementById('telefono')?.value || '';
-    datos.documento = document.getElementById('documento')?.value || '';
-    
-    // Campos de dirección
-    datos.direccion = document.getElementById('direccion')?.value || '';
-    datos.departamento = document.getElementById('departamento')?.value || '';
-    datos.provincia = document.getElementById('provincia')?.value || '';
-    datos.distrito = document.getElementById('distrito')?.value || '';
-    datos.referencia = document.getElementById('referencia')?.value || '';
-    
-    // Método de envío
-    const metodoEnvio = document.querySelector('input[name="metodo-envio"]:checked');
-    datos['metodo-envio'] = metodoEnvio?.value || 'estandar';
-    
-    // Método de pago
-    const metodoPago = document.querySelector('input[name="metodo-pago"]:checked');
-    datos['metodo-pago'] = metodoPago?.value || 'contraentrega';
-    
-    // Campos de tarjeta (si es pago con tarjeta)
-    if (datos['metodo-pago'] === 'tarjeta') {
-        datos['numero-tarjeta'] = document.getElementById('numero-tarjeta')?.value || '';
-        datos['nombre-tarjeta'] = document.getElementById('nombre-tarjeta')?.value || '';
-        datos['cvv'] = document.getElementById('cvv')?.value || '';
-        datos['mes-vencimiento'] = document.getElementById('mes-vencimiento')?.value || '';
-        datos['año-vencimiento'] = document.getElementById('año-vencimiento')?.value || '';
-    }
-    
-    // Términos
-    const terminos = document.getElementById('terminos');
-    datos.terminos = terminos?.checked || false;
-    
-    // Datos adicionales
-    datos.carrito = carritoActual;
-    datos.calculos = calculosActuales;
-    datos.fecha = new Date().toISOString();
-    datos.numeroPedido = 'EH' + Date.now().toString().slice(-8);
-    
-    console.log('✅ Datos recopilados:', datos);
-    console.log('👤 Datos del cliente:', {
-        nombre: datos.nombre,
-        apellidos: datos.apellidos,
-        email: datos.email,
-        telefono: datos.telefono,
-        documento: datos.documento
-    });
-    
-    return datos;
-}
-
-function procesarPedido(datos) {
-    try {
-        const pedidos = JSON.parse(localStorage.getItem('pedidos') || '[]');
-        pedidos.push(datos);
-        localStorage.setItem('pedidos', JSON.stringify(pedidos));
-        
-        localStorage.setItem('ultimoPedido', JSON.stringify(datos));
-        localStorage.removeItem('carrito');
-        
-        console.log('✅ Pedido procesado:', datos.numeroPedido);
-        
-        // ==================== CAMBIAR COLOR DEL BOTÓN A VERDE ====================
-        const btn = document.querySelector('#checkout-form button[type="submit"]');
-        if (btn) {
-            btn.className = 'btn btn-success btn-lg';
-            btn.innerHTML = '✅ ¡Pedido Procesado!';
-        }
-        
-        setTimeout(() => {
-            window.location.href = 'confirmacion.html';
-        }, 1000);
-        
-    } catch (error) {
-        console.error('❌ Error:', error);
-        mostrarLoading(false);
-        mostrarAlerta('Error al procesar el pedido', 'danger');
-    }
-}
-
-// ==================== FUNCIONES AUXILIARES ====================
 function mostrarLoading(mostrar) {
     const btn = document.querySelector('#checkout-form button[type="submit"]');
     if (!btn) return;
     
     if (mostrar) {
         btn.disabled = true;
-        btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Procesando...';
+        btn.innerHTML = '<i class="fas fa-spinner fa-spin me-2"></i>Procesando...';
     } else {
         btn.disabled = false;
-        btn.innerHTML = 'Finalizar Compra Segura';
+        btn.innerHTML = '<i class="fas fa-lock me-2"></i>Finalizar Compra Segura';
     }
 }
 
@@ -581,12 +599,29 @@ function mostrarAlerta(mensaje, tipo) {
     const container = document.getElementById('alertas-checkout');
     if (!container) return;
     
+    const tipoClase = tipo === 'success' ? 'alert-success' : 
+                     tipo === 'danger' ? 'alert-danger' : 
+                     tipo === 'warning' ? 'alert-warning' : 'alert-info';
+    
+    const icono = tipo === 'success' ? 'fas fa-check-circle' : 
+                  tipo === 'danger' ? 'fas fa-exclamation-triangle' : 
+                  tipo === 'warning' ? 'fas fa-exclamation-circle' : 'fas fa-info-circle';
+    
     container.innerHTML = `
-        <div class="alert alert-${tipo} alert-dismissible fade show">
+        <div class="alert ${tipoClase} alert-dismissible fade show" role="alert">
+            <i class="${icono} me-2"></i>
             ${mensaje}
-            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
         </div>
     `;
+    
+    // Auto-dismiss para mensajes de éxito
+    if (tipo === 'success') {
+        setTimeout(() => {
+            const alerta = container.querySelector('.alert');
+            if (alerta) alerta.remove();
+        }, 5000);
+    }
 }
 
-console.log('🔧 Checkout fix mensajes cargado - Manejo completo de errores');
+console.log('✅ Módulo checkout con validación completamente arreglada cargado');
