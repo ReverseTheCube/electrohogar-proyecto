@@ -202,22 +202,6 @@ export function agregarProductoAlCarrito(nombre, precio, cantidad) {
     return true;
 }
 
-// WHILE - Limpiar productos con cantidad 0
-function limpiarProductosVacios() {
-    let i = 0;
-    let productosEliminados = 0;
-    
-    while (i < carrito.length) {
-        if (carrito[i].cantidad <= 0) {
-            carrito.splice(i, 1);
-            productosEliminados++;
-        } else {
-            i++;
-        }
-    }
-    
-    return productosEliminados;
-}
 
 // SWITCH-CASE - Aplicar descuentos especiales por tipo de producto
 function aplicarDescuentoEspecial(nombreProducto, precio) {

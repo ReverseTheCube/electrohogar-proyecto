@@ -7,7 +7,6 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
     <link rel="stylesheet" href="styles/estilos.css">
-    <link rel="stylesheet" href="styles/confirmacion.css">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
 </head>
 <body class="d-flex flex-column min-vh-100">
@@ -65,14 +64,14 @@
         <!-- Mensaje de Confirmación -->
         <div class="row justify-content-center">
             <div class="col-lg-10">
-                <div class="confirmation-card text-center mb-5">
-                    <div class="success-icon">
+                <div class="success-card text-center mb-5">
+                    <div class="icon-success">
                         <i class="fas fa-check-circle"></i>
                     </div>
                     <h2 class="text-success mb-3">¡Pedido Realizado con Éxito!</h2>
                     <p class="lead mb-4">Gracias por tu compra. Tu pedido ha sido procesado correctamente.</p>
                     
-                    <div class="order-info">
+                    <div class="info-summary">
                         <div class="row">
                             <div class="col-md-6">
                                 <div class="info-item">
@@ -141,19 +140,19 @@
                         <div class="row">
                             <div class="col-md-8">
                                 <div class="order-summary">
-                                    <div class="total-line">
+                                    <div class="summary-line">
                                         <span>Subtotal:</span>
                                         <span id="subtotal-confirmacion">S/ 0.00</span>
                                     </div>
-                                    <div class="total-line">
+                                    <div class="summary-line">
                                         <span>Envío:</span>
                                         <span id="envio-confirmacion">S/ 0.00</span>
                                     </div>
-                                    <div class="total-line">
+                                    <div class="summary-line">
                                         <span>IGV (18%):</span>
                                         <span id="igv-confirmacion">S/ 0.00</span>
                                     </div>
-                                    <div class="total-line total-final">
+                                    <div class="summary-line total-final">
                                         <span><strong>Total:</strong></span>
                                         <span id="total-confirmacion"><strong>S/ 0.00</strong></span>
                                     </div>
@@ -173,9 +172,9 @@
                             <i class="fas fa-info-circle me-2"></i>
                             Se ha enviado un correo de confirmación a tu email con los detalles del pedido.
                         </div>
-                        <div class="email-simulator">
+                        <div class="email-preview">
                             <div id="email-content">
-                                <!-- Se llena dinámicamente -->
+                                
                             </div>
                         </div>
                     </div>
@@ -268,180 +267,6 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script src="js/modules/confirmacionModule.js"></script>
 
-    <!-- ESTILOS ESPECÍFICOS PARA CONFIRMACIÓN -->
-    <style>
-        :root {
-            --confirmacion-primary: #007bff;
-            --confirmacion-success: #28a745;
-            --confirmacion-warning: #ffc107;
-            --confirmacion-danger: #dc3545;
-            --confirmacion-info: #17a2b8;
-            --confirmacion-light: #f8f9fa;
-            --confirmacion-dark: #343a40;
-            --confirmacion-border: #e9ecef;
-            --confirmacion-shadow: 0 4px 15px rgba(0,0,0,0.1);
-            --confirmacion-shadow-hover: 0 6px 20px rgba(0,0,0,0.15);
-            --confirmacion-radius: 12px;
-            --confirmacion-transition: all 0.3s ease;
-        }
-
-        body {
-            background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
-            font-family: 'Poppins', sans-serif;
-            line-height: 1.6;
-        }
-
-        .confirmation-card {
-            background: white;
-            border-radius: var(--confirmacion-radius);
-            padding: 3rem 2rem;
-            box-shadow: var(--confirmacion-shadow);
-            border: 1px solid var(--confirmacion-border);
-            transition: var(--confirmacion-transition);
-            position: relative;
-            overflow: hidden;
-        }
-
-        .confirmation-card::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            height: 4px;
-            background: linear-gradient(90deg, var(--confirmacion-success), var(--confirmacion-primary));
-        }
-
-        .confirmation-card:hover {
-            box-shadow: var(--confirmacion-shadow-hover);
-            transform: translateY(-2px);
-        }
-
-        .success-icon {
-            font-size: 4rem;
-            color: var(--confirmacion-success);
-            margin-bottom: 1.5rem;
-            animation: successPulse 2s ease-in-out infinite;
-        }
-
-        @keyframes successPulse {
-            0% { transform: scale(1); }
-            50% { transform: scale(1.1); }
-            100% { transform: scale(1); }
-        }
-
-        .order-info {
-            background: var(--confirmacion-light);
-            border-radius: 8px;
-            padding: 1.5rem;
-            margin-top: 2rem;
-        }
-
-        .info-item {
-            margin-bottom: 0.5rem;
-        }
-
-        .section-card {
-            background: white;
-            border-radius: var(--confirmacion-radius);
-            box-shadow: var(--confirmacion-shadow);
-            overflow: hidden;
-            border: 1px solid var(--confirmacion-border);
-            transition: var(--confirmacion-transition);
-        }
-
-        .section-card:hover {
-            box-shadow: var(--confirmacion-shadow-hover);
-            transform: translateY(-2px);
-        }
-
-        .section-header {
-            background: linear-gradient(135deg, var(--confirmacion-primary), #0056b3);
-            color: white;
-            padding: 1rem 1.5rem;
-            margin: 0;
-        }
-
-        .section-header h4 {
-            margin: 0;
-            font-size: 1.1rem;
-            font-weight: 600;
-        }
-
-        .section-content {
-            padding: 1.5rem;
-        }
-
-        .total-line {
-            display: flex;
-            justify-content: space-between;
-            margin-bottom: 0.5rem;
-            padding: 0.25rem 0;
-        }
-
-        .total-final {
-            border-top: 2px solid var(--confirmacion-primary);
-            margin-top: 1rem;
-            padding-top: 0.75rem;
-            font-size: 1.1rem;
-        }
-
-        .email-simulator {
-            border: 2px dashed #dee2e6;
-            border-radius: 8px;
-            padding: 1rem;
-            background: #f8f9fa;
-            margin-top: 1rem;
-        }
-
-        .producto-confirmacion {
-            border: 1px solid var(--confirmacion-border);
-            border-radius: 8px;
-            padding: 1rem;
-            margin-bottom: 1rem;
-            background: white;
-            transition: var(--confirmacion-transition);
-        }
-
-        .producto-confirmacion:hover {
-            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-        }
-
-        .breadcrumb-item + .breadcrumb-item::before {
-            color: var(--confirmacion-primary);
-        }
-
-        .breadcrumb-item.active {
-            color: var(--confirmacion-success);
-            font-weight: 600;
-        }
-
-        .btn {
-            border-radius: 25px;
-            padding: 0.75rem 1.5rem;
-            font-weight: 600;
-            transition: var(--confirmacion-transition);
-        }
-
-        .btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
-        }
-
-        /* Responsive */
-        @media (max-width: 768px) {
-            .confirmation-card {
-                padding: 2rem 1rem;
-            }
-            
-            .success-icon {
-                font-size: 3rem;
-            }
-            
-            .section-content {
-                padding: 1rem;
-            }
-        }
-    </style>
+    
 </body>
 </html>

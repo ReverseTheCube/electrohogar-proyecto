@@ -1,6 +1,6 @@
 // =====================================================
-// MÓDULO CONFIRMACIÓN - ELECTROHOGAR (VERSIÓN CORREGIDA)
-// ✅ SOLUCIÓN: IGV incluido en precios (no adicional)
+// MÓDULO CONFIRMACIÓN - ELECTROHOGAR (CORREGIDO)
+// ✅ ARREGLADO: Clases CSS + Email simulado + Errores de consola
 // =====================================================
 
 // Variable global
@@ -24,7 +24,7 @@ document.addEventListener('DOMContentLoaded', function() {
     mostrarInformacionCliente();
     mostrarMetodoPago();
     mostrarResumenProductos();
-    mostrarTotales();
+    mostrarTotalesCorregidos(); // ✅ CORREGIDO
     generarEmailSimulado();
     
     console.log('✅ Confirmación cargada correctamente');
@@ -212,7 +212,7 @@ function mostrarResumenProductos() {
 }
 
 // ==================== 7. MOSTRAR TOTALES CORREGIDOS ====================
-function mostrarTotales() {
+function mostrarTotalesCorregidos() {
     console.log('💰 Mostrando totales...');
     
     const calculos = datosUltimoPedido.calculos || {};
@@ -244,14 +244,21 @@ function mostrarTotales() {
         }
     }
     
-    // Mostrar desglose detallado del IGV
-    mostrarDesgloseIGV(baseImponible, igvIncluido, subtotal);
+    // 🔧 CORREGIDO: Buscar con las nuevas clases consolidadas
+    mostrarDesgloseIGVCorregido(baseImponible, igvIncluido, subtotal);
 }
 
-// 🔧 NUEVA FUNCIÓN: Mostrar desglose del IGV incluido
-function mostrarDesgloseIGV(baseImponible, igvIncluido, subtotal) {
-    const contenedor = document.querySelector('.total-line.total-final').parentElement;
-    if (!contenedor) return;
+// 🔧 FUNCIÓN CORREGIDA: Mostrar desglose del IGV incluido
+function mostrarDesgloseIGVCorregido(baseImponible, igvIncluido, subtotal) {
+    // ✅ CORREGIDO: Buscar con las nuevas clases
+    const contenedor = document.querySelector('.summary-line.total-final')?.parentElement || 
+                     document.querySelector('#total-confirmacion')?.parentElement?.parentElement ||
+                     document.querySelector('.section-content');
+    
+    if (!contenedor) {
+        console.warn('⚠️ No se encontró contenedor para desglose IGV');
+        return;
+    }
     
     // Buscar o crear contenedor de desglose
     let desgloseContainer = document.getElementById('desglose-igv-confirmacion');
@@ -281,12 +288,15 @@ function mostrarDesgloseIGV(baseImponible, igvIncluido, subtotal) {
             ✅ Todos los precios mostrados incluyen IGV del 18%
         </small>
     `;
+    
+    console.log('✅ Desglose IGV mostrado correctamente');
 }
 
-// ==================== 8. GENERAR EMAIL SIMULADO ====================
+// ==================== 8. GENERAR EMAIL SIMULADO CORREGIDO ====================
 function generarEmailSimulado() {
     console.log('📧 Generando email simulado...');
     
+    // ✅ CORREGIDO: Buscar contenedor con nueva clase
     const emailContainer = document.getElementById('email-content');
     if (!emailContainer) {
         console.warn('⚠️ No se encontró contenedor de email');
@@ -355,7 +365,15 @@ function generarEmailSimulado() {
     `;
     
     emailContainer.innerHTML = emailHTML;
-    console.log('✅ Email simulado generado');
+    console.log('✅ Email simulado generado correctamente');
+    
+    // ✅ ASEGURAR QUE SE MUESTRE EL EMAIL
+    const emailPreview = emailContainer.closest('.email-preview');
+    if (emailPreview) {
+        emailPreview.style.display = 'block';
+        emailPreview.style.visibility = 'visible';
+        console.log('✅ Email preview visible');
+    }
 }
 
 function obtenerNombreMetodoPago(metodo) {
@@ -405,5 +423,5 @@ function debugConfirmacion() {
 // Hacer función de debug disponible globalmente
 window.debugConfirmacion = debugConfirmacion;
 
-console.log('✅ Módulo de confirmación corregido cargado - IGV incluido en precios');
+console.log('✅ Módulo de confirmación CORREGIDO cargado - Sin errores de consola');
 console.log('💡 Usa debugConfirmacion() en la consola para ver todos los datos');

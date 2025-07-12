@@ -22,20 +22,7 @@ const descuentosPorCantidad = [
     [11, 999, 25]
 ];
 
-// OPERADORES MATEMÁTICOS
-function calcularDescuento(precio, porcentaje) {
-    const descuento = precio * (porcentaje / 100);
-    const precioFinal = precio - descuento;
-    const iva = precioFinal * 0.18;
-    const total = precioFinal + iva;
-    
-    return {
-        descuento: descuento,
-        precioFinal: precioFinal,
-        iva: iva,
-        total: total
-    };
-}
+
 
 // ESTRUCTURA WHILE - Aplicar filtros
 function aplicarFiltros() {
@@ -78,36 +65,6 @@ function aplicarFiltros() {
     alert(`Se encontraron ${productosVisibles} productos que cumplen los filtros`);
 }
 
-// ESTRUCTURA SWITCH-CASE
-function obtenerDescuentoEspecial(nombreProducto) {
-    let descuento = 0;
-    
-    switch (nombreProducto.toLowerCase()) {
-        case "aire acondicionado":
-            descuento = 15;
-            break;
-        case "refrigeradora":
-            descuento = 20;
-            break;
-        case "batidora":
-        case "balanza digital":
-            descuento = 8;
-            break;
-        case "cocina":
-            descuento = 12;
-            break;
-        case "alarmas de seguridad":
-            descuento = 10;
-            break;
-        case "amplificador de guitarra":
-            descuento = 18;
-            break;
-        default:
-            descuento = 5;
-    }
-    
-    return descuento;
-}
 
 // ESTRUCTURA FOR
 function verificarStock() {

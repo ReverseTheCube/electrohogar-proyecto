@@ -6,7 +6,6 @@
   <title>Finalizar Compra - ElectroHogar</title>
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
   <link rel="stylesheet" href="styles/estilos.css">
-  <link rel="stylesheet" href="styles/checkout.css">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
 </head>
@@ -83,8 +82,8 @@
         <form id="checkout-form" class="needs-validation" novalidate>
           
           <!-- Información Personal -->
-          <div class="checkout-section">
-            <div class="section-header">
+          <div class="section-card">
+            <div class="card-header">
               <h4><i class="fas fa-user me-2"></i>Información Personal</h4>
             </div>
             <div class="section-content">
@@ -131,8 +130,8 @@
           </div>
 
           <!-- Dirección de Envío -->
-          <div class="checkout-section">
-            <div class="section-header">
+          <div class="section-card">
+            <div class="card-header">
               <h4><i class="fas fa-map-marker-alt me-2"></i>Dirección de Envío</h4>
             </div>
             <div class="section-content">
@@ -185,13 +184,13 @@
           </div>
 
           <!-- Método de Envío -->
-          <div class="checkout-section">
-            <div class="section-header">
+          <div class="section-card">
+            <div class="card-header">
               <h4><i class="fas fa-truck me-2"></i>Método de Envío</h4>
             </div>
             <div class="section-content">
               <div class="shipping-options">
-                <div class="form-check shipping-option">
+                <div class="form-check option-card">
                   <input class="form-check-input" type="radio" name="metodo-envio" id="envio-estandar" value="estandar" data-precio="0" checked>
                   <label class="form-check-label" for="envio-estandar">
                     <div class="option-info">
@@ -200,7 +199,7 @@
                     </div>
                   </label>
                 </div>
-                <div class="form-check shipping-option">
+                <div class="form-check option-card">
                   <input class="form-check-input" type="radio" name="metodo-envio" id="envio-express" value="express" data-precio="15">
                   <label class="form-check-label" for="envio-express">
                     <div class="option-info">
@@ -209,7 +208,7 @@
                     </div>
                   </label>
                 </div>
-                <div class="form-check shipping-option">
+                <div class="form-check option-card">
                   <input class="form-check-input" type="radio" name="metodo-envio" id="envio-premium" value="premium" data-precio="25">
                   <label class="form-check-label" for="envio-premium">
                     <div class="option-info">
@@ -223,31 +222,31 @@
           </div>
 
           <!-- Método de Pago -->
-          <div class="checkout-section">
-            <div class="section-header">
+          <div class="section-card">
+            <div class="card-header">
               <h4><i class="fas fa-credit-card me-2"></i>Método de Pago</h4>
             </div>
             <div class="section-content">
               <div class="payment-methods">
-                <div class="form-check payment-option">
+                <div class="form-check option-card">
                   <input class="form-check-input" type="radio" name="metodo-pago" id="pago-tarjeta" value="tarjeta" checked>
                   <label class="form-check-label" for="pago-tarjeta">
                     <i class="fas fa-credit-card me-2"></i>Tarjeta de Crédito/Débito
                   </label>
                 </div>
-                <div class="form-check payment-option">
+                <div class="form-check option-card">
                   <input class="form-check-input" type="radio" name="metodo-pago" id="pago-yape" value="yape">
                   <label class="form-check-label" for="pago-yape">
                     <i class="fas fa-mobile-alt me-2"></i>Yape / Plin
                   </label>
                 </div>
-                <div class="form-check payment-option">
+                <div class="form-check option-card">
                   <input class="form-check-input" type="radio" name="metodo-pago" id="pago-transferencia" value="transferencia">
                   <label class="form-check-label" for="pago-transferencia">
                     <i class="fas fa-university me-2"></i>Transferencia Bancaria
                   </label>
                 </div>
-                <div class="form-check payment-option">
+                <div class="form-check option-card">
                   <input class="form-check-input" type="radio" name="metodo-pago" id="pago-contraentrega" value="contraentrega">
                   <label class="form-check-label" for="pago-contraentrega">
                     <i class="fas fa-money-bill-wave me-2"></i>Pago Contra Entrega
@@ -310,7 +309,7 @@
           </div>
 
           <!-- Términos y Condiciones -->
-          <div class="checkout-section">
+          <div class="section-card">
             <div class="section-content">
               <div class="form-check">
                 <input class="form-check-input" type="checkbox" value="" id="terminos" required>
@@ -329,7 +328,7 @@
 
       <!-- Resumen del Pedido -->
       <div class="col-lg-4">
-        <div class="order-summary">
+        <div class="summary-card">
           <h4 class="mb-3"><i class="fas fa-shopping-bag me-2"></i>Resumen del Pedido</h4>
           
           <!-- Productos -->

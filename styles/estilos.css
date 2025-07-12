@@ -1,4 +1,36 @@
 /* ==================== */
+/* VARIABLES CSS CONSOLIDADAS */
+/* ==================== */
+:root {
+  /* Colores principales */
+  --primary-color: #007bff;
+  --secondary-color: #6c757d;
+  --success-color: #28a745;
+  --danger-color: #dc3545;
+  --warning-color: #ffc107;
+  --info-color: #17a2b8;
+  --light-color: #f8f9fa;
+  --dark-color: #343a40;
+  
+  /* Bordes y sombras */
+  --border-color: #e9ecef;
+  --border-radius: 12px;
+  --shadow-sm: 0 2px 8px rgba(0,0,0,0.1);
+  --shadow-md: 0 4px 15px rgba(0,0,0,0.1);
+  --shadow-lg: 0 6px 20px rgba(0,0,0,0.15);
+  
+  /* Transiciones */
+  --transition: all 0.3s ease;
+  --transition-fast: all 0.2s ease;
+  
+  /* Tipografía */
+  --font-primary: 'Poppins', sans-serif;
+  --font-size-sm: 0.875rem;
+  --font-size-base: 1rem;
+  --font-size-lg: 1.125rem;
+}
+
+/* ==================== */
 /* RESET Y ESTILOS BASE */
 /* ==================== */
 * {
@@ -12,7 +44,7 @@ html, body {
 }
 
 body {
-  font-family: 'Poppins', sans-serif;
+  font-family: var(--font-primary);
   line-height: 1.6;
   background-color: #f9f9f9;
   color: #333;
@@ -24,7 +56,6 @@ body {
 main {
   flex: 1;
 }
-
 
 /* ================= */
 /* TIPOGRAFÍA */
@@ -54,7 +85,7 @@ h1, h2, h3, h4, h5, h6 {
   display: block;
   width: 60px;
   height: 4px;
-  background: #0d6efd;
+  background: var(--primary-color);
   margin: 1rem auto;
 }
 
@@ -79,15 +110,13 @@ h1, h2, h3, h4, h5, h6 {
 .delivery-time {
   font-size: 1.2rem;
   font-weight: 600;
-  color: #0d6efd;
+  color: var(--primary-color);
 }
 
 .price {
   color: #666;
   font-size: 0.9rem;
 }
-
-
 
 /* LAYOUT - FLEXBOX */
 .navbar {
@@ -153,9 +182,7 @@ h1, h2, h3, h4, h5, h6 {
   text-align: center;
 }
 
-
 /* LAYOUT - GRID */
-
 .productos-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
@@ -202,15 +229,12 @@ footer {
 }
 
 .options-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-  gap: 2rem;
-  margin: 3rem 0;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
 }
 
-
 /* COMPONENTES */
-
 
 /* Navbar */
 .navbar {
@@ -223,13 +247,13 @@ footer {
 }
 
 .navbar-nav .nav-link {
-  transition: background-color 0.3s ease, color 0.3s ease;
+  transition: var(--transition);
   border-radius: 8px;
   padding: 8px 12px;
 }
 
 .nav-link:hover {
-  background-color: #007bff;
+  background-color: var(--primary-color);
   color: white !important;
 }
 
@@ -248,19 +272,19 @@ marquee {
 
 /* Cards */
 .card {
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  transition: var(--transition);
   cursor: pointer;
 }
 
 .card:hover {
   transform: translateY(-5px);
-  box-shadow: 0 10px 20px rgba(0,0,0,0.15);
+  box-shadow: var(--shadow-md);
 }
 
 .card img {
   height: 200px;
   object-fit: cover;
-  transition: transform 0.3s ease;
+  transition: var(--transition);
 }
 
 .card:hover img {
@@ -271,8 +295,8 @@ marquee {
   background: white;
   padding: 2rem;
   border-radius: 15px;
-  box-shadow: 0 10px 30px rgba(0,0,0,0.1);
-  transition: transform 0.3s ease;
+  box-shadow: var(--shadow-md);
+  transition: var(--transition);
   text-align: center;
 }
 
@@ -284,9 +308,9 @@ marquee {
   background: #fff;
   padding: 30px;
   border-radius: 15px;
-  box-shadow: 0 10px 30px rgba(0,0,0,0.1);
-  transition: all 0.3s ease;
-  border-left: 5px solid #0d6efd;
+  box-shadow: var(--shadow-md);
+  transition: var(--transition);
+  border-left: 5px solid var(--primary-color);
 }
 
 .mission-card:hover {
@@ -294,31 +318,31 @@ marquee {
 }
 
 .value-item {
-  background: #f8f9fa;
+  background: var(--light-color);
   padding: 25px;
   border-radius: 10px;
   text-align: center;
-  border: 2px solid #0d6efd;
+  border: 2px solid var(--primary-color);
 }
 
 .value-item:hover {
   transform: translateY(-5px);
-  box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+  box-shadow: var(--shadow-sm);
 }
 
 .info-card {
   background: white;
   padding: 2rem;
   border-radius: 15px;
-  box-shadow: 0 5px 20px rgba(0,0,0,0.05);
+  box-shadow: var(--shadow-sm);
 }
 
 .politica-card {
   background: #fff;
   border-radius: 15px;
-  box-shadow: 0 5px 25px rgba(0,0,0,0.08);
+  box-shadow: var(--shadow-sm);
   padding: 2rem;
-  transition: transform 0.3s ease;
+  transition: var(--transition);
 }
 
 .politica-card:hover {
@@ -326,16 +350,38 @@ marquee {
 }
 
 .option-card {
+  border: 2px solid var(--border-color);
+  border-radius: var(--border-radius);
+  padding: 1rem;
+  transition: var(--transition);
+  cursor: pointer;
   background: white;
-  padding: 2rem;
-  border-radius: 15px;
-  box-shadow: 0 5px 15px rgba(0,0,0,0.1);
-  transition: all 0.3s ease;
+  margin-bottom: 1rem;
 }
+
+.option-card:hover {
+  border-color: var(--primary-color);
+  background-color: rgba(0, 123, 255, 0.05);
+}
+
+.option-card input[type="radio"]:checked + label {
+  color: var(--primary-color);
+  font-weight: 600;
+}
+
+.option-card:has(input:checked) {
+  border-color: var(--primary-color);
+  background-color: rgba(0, 123, 255, 0.1);
+}
+
+.option-info {
+  margin-left: 0.5rem;
+}
+
 .faq-item {
   background: #fff;
   border-radius: 10px;
-  box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+  box-shadow: var(--shadow-sm);
   overflow: hidden;
   margin-bottom: 1rem;
   opacity: 0;
@@ -353,8 +399,8 @@ marquee {
   align-items: center;
   padding: 1.5rem;
   cursor: pointer;
-  background: #f8f9fa;
-  transition: background 0.3s ease;
+  background: var(--light-color);
+  transition: var(--transition);
 }
 
 .faq-pregunta:hover {
@@ -362,7 +408,7 @@ marquee {
 }
 
 .faq-icon {
-  transition: transform 0.3s ease;
+  transition: var(--transition);
   margin-left: 1rem;
 }
 
@@ -373,16 +419,14 @@ marquee {
   transition: all 0.4s ease;
 }
 
-/* Estado abierto */
 .faq-toggle:checked + .faq-pregunta + .faq-respuesta {
-  max-height: 1000px; /* Valor suficientemente grande */
+  max-height: 1000px;
   padding: 0 1.5rem 1.5rem;
 }
 
 .faq-toggle:checked + .faq-pregunta .faq-icon {
   transform: rotate(180deg);
 }
-
 
 /* Carousel */
 .carousel {
@@ -407,51 +451,15 @@ marquee {
   border-radius: 8px;
 }
 
-/* FAQ Items */
-.faq-item {
-  background: #fff;
-  border-radius: 10px;
-  box-shadow: 0 3px 10px rgba(0,0,0,0.1);
-  overflow: hidden;
-  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-  /* Animación para FAQ */
-  opacity: 0;
-  transform: translateY(20px);
-  animation: fadeInUp 0.6s ease-out forwards;
-}
-
-.faq-pregunta {
-  padding: 1.5rem;
-  cursor: pointer;
-  background: #f8f9fa;
-  transition: background 0.3s ease;
-}
-
-.faq-pregunta:hover {
-  background: #e9ecef;
-}
-
-.faq-icon {
-  margin-right: 1rem;
-  transition: transform 0.3s ease;
-}
-
-.faq-respuesta {
-  max-height: 0;
-  overflow: hidden;
-  padding: 0 1.5rem;
-  transition: all 0.4s ease;
-}
-
 /* Botones */
 .btn-seguimiento {
-  background: #0d6efd;
+  background: var(--primary-color);
   color: white;
   border: none;
   padding: 0.8rem 1.5rem;
   border-radius: 25px;
   cursor: pointer;
-  transition: all 0.3s ease;
+  transition: var(--transition);
 }
 
 .btn-seguimiento:hover {
@@ -463,7 +471,7 @@ marquee {
 .card-icon {
   width: 80px;
   height: 80px;
-  background: #0d6efd;
+  background: var(--primary-color);
   border-radius: 50%;
   margin: -60px auto 1rem;
   display: flex;
@@ -475,28 +483,22 @@ marquee {
 
 .value-item i {
   font-size: 2.5rem;
-  color: #0d6efd;
+  color: var(--primary-color);
   margin-bottom: 1rem;
 }
 
 .politica-item i {
-  color: #0d6efd;
+  color: var(--primary-color);
   min-width: 25px;
 }
 
 .politica-header i {
   font-size: 2rem;
-  color: #0d6efd;
-}
-
-.option-card i {
-  font-size: 2.5rem;
-  color: #0d6efd;
-  margin-bottom: 1rem;
+  color: var(--primary-color);
 }
 
 .map-marker i {
-  color: #dc3545;
+  color: var(--danger-color);
 }
 
 /* Listas */
@@ -508,7 +510,7 @@ marquee {
 
 .check-list li::before {
   content: '✔';
-  color: #0d6efd;
+  color: var(--primary-color);
   position: absolute;
   left: 0;
 }
@@ -525,7 +527,7 @@ footer {
 }
 
 footer a {
-  transition: color 0.3s ease;
+  transition: var(--transition);
   text-decoration: none;
 }
 
@@ -547,7 +549,7 @@ footer a:hover {
 }
 
 .social-icons a {
-  transition: transform 0.3s ease;
+  transition: var(--transition);
 }
 
 .social-icons a:hover {
@@ -558,7 +560,7 @@ footer a:hover {
 .coverage-map {
   position: relative;
   height: 400px;
-  background: #f8f9fa;
+  background: var(--light-color);
   border-radius: 15px;
   margin: 2rem 0;
   overflow: hidden;
@@ -569,14 +571,11 @@ footer a:hover {
   padding: 0.5rem 1rem;
   background: white;
   border-radius: 25px;
-  box-shadow: 0 3px 10px rgba(0,0,0,0.1);
-  transition: all 0.3s ease;
+  box-shadow: var(--shadow-sm);
+  transition: var(--transition);
 }
 
-
-/* ================= */
 /* SECCIONES ESPECÍFICAS */
-/* ================= */
 
 /* Hero Section */
 .hero {
@@ -588,7 +587,7 @@ footer a:hover {
 
 /* About Page */
 .about-hero {
-  background: #0d6efd;
+  background: var(--primary-color);
   padding: 100px 0;
   margin-top: 80px;
   clip-path: polygon(0 0, 100% 0, 100% 90%, 0 100%);
@@ -617,6 +616,261 @@ footer a:hover {
   margin-bottom: 4rem;
 }
 
+/* ==================== */
+/* SECCIONES CONSOLIDADAS - CHECKOUT */
+/* ==================== */
+
+/* Secciones generales del checkout */
+.section-card {
+  background: white;
+  border-radius: var(--border-radius);
+  box-shadow: var(--shadow-md);
+  overflow: hidden;
+  border: 1px solid var(--border-color);
+  transition: var(--transition);
+  margin-bottom: 2rem;
+}
+
+.section-card:hover {
+  box-shadow: var(--shadow-lg);
+}
+
+.card-header {
+  background: linear-gradient(135deg, var(--primary-color), #0056b3);
+  color: white;
+  padding: 1rem 1.5rem;
+  margin: 0;
+  position: relative;
+}
+
+.card-header::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: linear-gradient(90deg, rgba(255,255,255,0.3), rgba(255,255,255,0.1));
+}
+
+.card-header h4 {
+  margin: 0;
+  font-size: 1.1rem;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+}
+
+.section-content {
+  padding: 1.5rem;
+}
+
+/* Resumen del pedido */
+.summary-card {
+  background: white;
+  border-radius: var(--border-radius);
+  box-shadow: var(--shadow-md);
+  padding: 1.5rem;
+  border: 1px solid var(--border-color);
+  position: sticky;
+  top: 2rem;
+}
+
+.summary-card h4 {
+  color: var(--primary-color);
+  border-bottom: 2px solid var(--border-color);
+  padding-bottom: 0.5rem;
+}
+
+.summary-line {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 0.5rem;
+  padding: 0.25rem 0;
+  font-size: 0.95rem;
+}
+
+.summary-line.total-final {
+  border-top: 2px solid var(--primary-color);
+  margin-top: 1rem;
+  padding-top: 0.75rem;
+  font-size: 1.1rem;
+  background: white;
+  border-radius: 4px;
+  padding: 0.75rem;
+  box-shadow: var(--shadow-sm);
+}
+
+/* Validaciones de formulario */
+.form-control:focus {
+  border-color: var(--primary-color);
+  box-shadow: 0 0 0 0.25rem rgba(0, 123, 255, 0.25);
+}
+
+.form-select:focus {
+  border-color: var(--primary-color);
+  box-shadow: 0 0 0 0.25rem rgba(0, 123, 255, 0.25);
+}
+
+.was-validated .form-control:invalid,
+.was-validated .form-select:invalid {
+  border-color: var(--danger-color);
+}
+
+.was-validated .form-control:valid,
+.was-validated .form-select:valid {
+  border-color: var(--success-color);
+}
+
+.invalid-feedback {
+  display: block;
+  width: 100%;
+  margin-top: 0.25rem;
+  font-size: var(--font-size-sm);
+  color: var(--danger-color);
+}
+
+/* Alertas personalizadas */
+.alert-custom {
+  border-radius: var(--border-radius);
+  border: none;
+  box-shadow: var(--shadow-md);
+  animation: slideDown 0.5s ease;
+  margin-bottom: 1rem;
+}
+
+/* ==================== */
+/* SECCIONES CONSOLIDADAS - CONFIRMACIÓN */
+/* ==================== */
+
+/* Tarjeta de confirmación principal */
+.success-card {
+  background: white;
+  border-radius: var(--border-radius);
+  padding: 3rem 2rem;
+  box-shadow: var(--shadow-md);
+  border: 1px solid var(--border-color);
+  transition: var(--transition);
+  position: relative;
+  overflow: hidden;
+  text-align: center;
+}
+
+.success-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 4px;
+  background: linear-gradient(90deg, var(--success-color), var(--primary-color));
+}
+
+.success-card:hover {
+  box-shadow: var(--shadow-lg);
+  transform: translateY(-2px);
+}
+
+/* Icono de éxito */
+.icon-success {
+  font-size: 4rem;
+  color: var(--success-color);
+  margin-bottom: 1.5rem;
+  animation: successPulse 2s ease-in-out infinite;
+}
+
+/* Información del pedido */
+.info-summary {
+  background: linear-gradient(135deg, var(--light-color), #ffffff);
+  border-radius: 8px;
+  padding: 1.5rem;
+  margin-top: 2rem;
+  border: 1px solid var(--border-color);
+}
+
+.info-item {
+  margin-bottom: 0.5rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.info-item strong {
+  color: var(--dark-color);
+  font-weight: 600;
+}
+
+/* Simulador de email */
+.email-preview {
+  border: 2px dashed var(--border-color);
+  border-radius: 8px;
+  padding: 1.5rem;
+  background: var(--light-color);
+  font-family: 'Courier New', monospace;
+  font-size: 0.9rem;
+  line-height: 1.5;
+  max-height: 500px;
+  overflow-y: auto;
+  transition: var(--transition);
+  margin-top: 1rem;
+}
+
+.email-preview:hover {
+  border-color: var(--primary-color);
+  background: #f8f9fa;
+}
+
+.email-header {
+  border-bottom: 1px solid var(--border-color);
+  padding-bottom: 0.5rem;
+  margin-bottom: 1rem;
+}
+
+.email-header h5 {
+  color: var(--primary-color);
+  font-family: var(--font-primary);
+  margin-bottom: 0.5rem;
+}
+
+.email-body {
+  color: var(--dark-color);
+}
+
+.email-body h6 {
+  color: var(--primary-color);
+  font-family: var(--font-primary);
+  margin-top: 1rem;
+  margin-bottom: 0.5rem;
+}
+
+.email-body ul {
+  margin-left: 1rem;
+  margin-bottom: 1rem;
+}
+
+.email-body ul li {
+  margin-bottom: 0.25rem;
+}
+
+/* Scroll personalizado para email */
+.email-preview::-webkit-scrollbar {
+  width: 8px;
+}
+
+.email-preview::-webkit-scrollbar-track {
+  background: #f1f1f1;
+  border-radius: 4px;
+}
+
+.email-preview::-webkit-scrollbar-thumb {
+  background: var(--primary-color);
+  border-radius: 4px;
+}
+
+.email-preview::-webkit-scrollbar-thumb:hover {
+  background: #0056b3;
+}
 
 /* ================= */
 /* ANIMACIONES */
@@ -630,6 +884,17 @@ footer a:hover {
     opacity: 1;
     transform: translateY(0);
   }
+}
+
+@keyframes slideDown {
+  from { opacity: 0; transform: translateY(-20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes successPulse {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.1); }
+  100% { transform: scale(1); }
 }
 
 @keyframes slideIn {
@@ -731,10 +996,22 @@ footer a:hover {
   }
 }
 
+/* ==================== */
+/* MEDIA QUERIES CONSOLIDADAS */
+/* ==================== */
 
-/* ================= */
-/* MEDIA QUERIES */
-/* ================= */
+@media (max-width: 992px) {
+  .summary-card {
+    position: relative;
+    top: 0;
+    margin-top: 2rem;
+  }
+  
+  .section-content {
+    padding: 1rem;
+  }
+}
+
 @media (max-width: 768px) {
   .carousel {
     height: 60vh !important;
@@ -744,7 +1021,7 @@ footer a:hover {
   .carousel-item {
     height: 50vh !important;
     min-height: 300px;
-      }
+  }
   
   marquee {
     font-size: 0.9rem;
@@ -761,7 +1038,6 @@ footer a:hover {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
     gap: 1.5rem;
-    
   }
   
   .faq-container {
@@ -800,14 +1076,87 @@ footer a:hover {
     padding: 1.5rem;
   }
 
+  /* Estilos consolidados responsive */
+  .success-card {
+    padding: 2rem 1rem;
+    margin: 1rem 0;
+  }
+  
+  .icon-success {
+    font-size: 3rem;
+  }
+  
+  .section-content {
+    padding: 1rem;
+  }
+  
+  .option-card {
+    padding: 0.75rem;
+  }
+  
+  .summary-card {
+    padding: 1rem;
+  }
+  
+  .options-grid {
+    gap: 0.5rem;
+  }
+
   /* Ajustes para animaciones en móviles */
   .faq-item {
     animation-delay: 0s !important;
   }
 }
 
-@media (max-width: 480px) {
+@media (max-width: 576px) {
   .productos-grid {
     grid-template-columns: 1fr;
   }
+  
+  .success-card {
+    margin: 0.5rem;
+  }
+  
+  .icon-success {
+    font-size: 2.5rem;
+  }
+  
+  .card-header h4 {
+    font-size: 1rem;
+  }
+  
+  .info-summary {
+    padding: 1rem;
+  }
+  
+  .email-preview {
+    font-size: 0.8rem;
+    padding: 1rem;
+  }
+}   
+/* CORRECCIÓN ESPECÍFICA PARA EMAIL */
+.email-preview {
+  border: 2px dashed #dee2e6 !important;
+  border-radius: 8px !important;
+  padding: 1.5rem !important;
+  background: #f8f9fa !important;
+  font-family: 'Courier New', monospace !important;
+  font-size: 0.9rem !important;
+  line-height: 1.5 !important;
+  max-height: 500px !important;
+  overflow-y: auto !important;
+  margin-top: 1rem !important;
+  display: block !important;
+  width: 100% !important;
+}
+
+.email-preview .email-header {
+  border-bottom: 1px solid #dee2e6 !important;
+  padding-bottom: 0.5rem !important;
+  margin-bottom: 1rem !important;
+}
+
+.email-preview .email-body {
+  color: #343a40 !important;
+  display: block !important;
 }

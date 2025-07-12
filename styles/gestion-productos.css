@@ -1,304 +1,116 @@
-/* ==================== GESTIÓN DE PRODUCTOS - CSS ==================== */
-
-/* Variables CSS personalizadas */
-:root {
-  --color-primario: #007bff;
-  --color-secundario: #6c757d;
-  --color-exito: #28a745;
-  --color-peligro: #dc3545;
-  --color-advertencia: #ffc107;
-  --sombra-tarjeta: 0 4px 15px rgba(0,0,0,0.1);
-  --transicion-suave: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-  --border-radius: 12px;
-}
-
-* {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-}
-
+/* GESTION-PRODUCTOS.CSS CORREGIDO */
 body {
-  font-family: 'Poppins', sans-serif;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-  min-height: 100vh;
-  color: #333;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%) !important;
+  min-height: 100vh !important;
 }
 
-/* ==================== NAVEGACIÓN ==================== */
-.navbar-custom {
-  background: rgba(255, 255, 255, 0.95);
-  backdrop-filter: blur(10px);
-  box-shadow: var(--sombra-tarjeta);
-  border-bottom: 1px solid rgba(255, 255, 255, 0.2);
-}
-
-/* ==================== CONTAINER PRINCIPAL ==================== */
 .main-container {
-  background: rgba(255, 255, 255, 0.9);
-  backdrop-filter: blur(15px);
-  border-radius: var(--border-radius);
-  box-shadow: var(--sombra-tarjeta);
-  margin: 2rem auto;
-  padding: 2rem;
-  max-width: 1200px;
+  background: rgba(255, 255, 255, 0.9) !important;
+  backdrop-filter: blur(15px) !important;
+  border-radius: 12px !important;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.1) !important;
+  margin: 2rem auto !important;
+  padding: 2rem !important;
+  max-width: 1200px !important;
 }
 
-/* ==================== PANEL DE CONTROL ==================== */
 .control-panel {
-  background: linear-gradient(135deg, var(--color-primario), #0056b3);
-  color: white;
-  padding: 1.5rem;
-  border-radius: var(--border-radius);
-  margin-bottom: 2rem;
-  box-shadow: var(--sombra-tarjeta);
+  background: linear-gradient(135deg, #007bff, #0056b3) !important;
+  color: white !important;
+  padding: 1.5rem !important;
+  border-radius: 12px !important;
+  margin-bottom: 2rem !important;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.1) !important;
 }
 
 .control-btn {
-  transition: var(--transicion-suave);
-  border: none;
-  padding: 0.75rem 1.5rem;
-  border-radius: 8px;
-  font-weight: 600;
-  margin: 0.25rem;
-  cursor: pointer;
-  text-transform: uppercase;
-  letter-spacing: 0.5px;
+  border: none !important;
+  padding: 0.75rem 1.5rem !important;
+  border-radius: 8px !important;
+  font-weight: 600 !important;
+  margin: 0.25rem !important;
+  cursor: pointer !important;
+  text-transform: uppercase !important;
+  transition: all 0.3s ease !important;
 }
 
 .control-btn:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+  transform: translateY(-2px) !important;
+  box-shadow: 0 5px 15px rgba(0,0,0,0.2) !important;
 }
 
-.btn-crear { background: var(--color-exito); color: white; }
-.btn-navegar { background: var(--color-advertencia); color: #333; }
-.btn-modificar { background: var(--color-peligro); color: white; }
-.btn-analizar { background: var(--color-secundario); color: white; }
+.btn-crear { background: #28a745 !important; color: white !important; }
+.btn-navegar { background: #ffc107 !important; color: #333 !important; }
+.btn-modificar { background: #dc3545 !important; color: white !important; }
+.btn-analizar { background: #6c757d !important; color: white !important; }
 
-/* ==================== TARJETAS DE PRODUCTOS ==================== */
 .productos-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-  gap: 1.5rem;
-  margin: 2rem 0;
+  display: grid !important;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)) !important;
+  gap: 1.5rem !important;
+  margin: 2rem 0 !important;
 }
 
 .producto-card {
-  background: white;
-  border-radius: var(--border-radius);
-  padding: 1.5rem;
-  box-shadow: var(--sombra-tarjeta);
-  transition: var(--transicion-suave);
-  border: 2px solid transparent;
-  position: relative;
-  overflow: hidden;
+  background: white !important;
+  border-radius: 12px !important;
+  padding: 1.5rem !important;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.1) !important;
+  border: 2px solid transparent !important;
+  position: relative !important;
 }
 
-.producto-card::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: -100%;
-  width: 100%;
-  height: 100%;
-  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.4), transparent);
-  transition: left 0.5s;
-}
-
-.producto-card:hover::before {
-  left: 100%;
-}
-
-.producto-card:hover {
-  transform: translateY(-5px) scale(1.02);
-  box-shadow: 0 10px 30px rgba(0,0,0,0.2);
-}
-
-/* Estados especiales mediante atributos */
 .producto-card[data-estado="seleccionado"] {
-  border-color: var(--color-primario);
-  box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.3);
-  transform: scale(1.05);
+  border-color: #007bff !important;
+  box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.3) !important;
+  transform: scale(1.05) !important;
 }
 
-.producto-card[data-estado="modificado"] {
-  border-color: var(--color-exito);
-  animation: pulso-verde 2s infinite;
-}
-
-.producto-card[data-estado="eliminado"] {
-  opacity: 0.5;
-  transform: scale(0.95);
-  filter: grayscale(1);
-}
-
-@keyframes pulso-verde {
-  0% { box-shadow: 0 0 0 0 rgba(40, 167, 69, 0.7); }
-  70% { box-shadow: 0 0 0 10px rgba(40, 167, 69, 0); }
-  100% { box-shadow: 0 0 0 0 rgba(40, 167, 69, 0); }
-}
-
-/* ==================== ELEMENTOS ESPECÍFICOS ==================== */
-.producto-imagen {
-  width: 100%;
-  height: 200px;
-  object-fit: cover;
-  border-radius: 8px;
-  margin-bottom: 1rem;
-  transition: var(--transicion-suave);
-}
-
-.producto-imagen:hover {
-  transform: scale(1.1);
-}
-
-.producto-titulo {
-  font-size: 1.25rem;
-  font-weight: 600;
-  color: var(--color-primario);
-  margin-bottom: 0.5rem;
-}
-
-.producto-precio {
-  font-size: 1.5rem;
-  font-weight: bold;
-  color: var(--color-exito);
-}
-
-.producto-acciones {
-  display: flex;
-  gap: 0.5rem;
-  margin-top: 1rem;
-}
-
-.accion-btn {
-  flex: 1;
-  padding: 0.5rem;
-  border: none;
-  border-radius: 6px;
-  cursor: pointer;
-  transition: var(--transicion-suave);
-  font-weight: 500;
-}
-
-/* ==================== FORMULARIO DINÁMICO ==================== */
 .formulario-producto {
-  background: #f8f9fa;
-  padding: 1.5rem;
-  border-radius: var(--border-radius);
-  border: 2px dashed #dee2e6;
-  margin: 2rem 0;
-  transition: var(--transicion-suave);
+  background: #f8f9fa !important;
+  padding: 1.5rem !important;
+  border-radius: 12px !important;
+  border: 2px dashed #dee2e6 !important;
+  margin: 2rem 0 !important;
 }
 
 .formulario-producto.activo {
-  border-color: var(--color-primario);
-  background: rgba(0, 123, 255, 0.05);
+  border-color: #007bff !important;
+  background: rgba(0, 123, 255, 0.05) !important;
 }
 
 .form-input {
-  width: 100%;
-  padding: 0.75rem;
-  border: 2px solid #e9ecef;
-  border-radius: 8px;
-  margin-bottom: 1rem;
-  transition: var(--transicion-suave);
-  font-family: inherit;
+  width: 100% !important;
+  padding: 0.75rem !important;
+  border: 2px solid #e9ecef !important;
+  border-radius: 8px !important;
+  margin-bottom: 1rem !important;
 }
 
 .form-input:focus {
-  outline: none;
-  border-color: var(--color-primario);
-  box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.1);
+  border-color: #007bff !important;
+  box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.1) !important;
 }
 
-/* ==================== INDICADORES VISUALES ==================== */
 .navegacion-indicador {
-  position: absolute;
-  top: 10px;
-  right: 10px;
-  background: var(--color-primario);
-  color: white;
-  padding: 0.25rem 0.75rem;
-  border-radius: 20px;
-  font-size: 0.875rem;
-  font-weight: 600;
+  position: absolute !important;
+  top: 10px !important;
+  right: 10px !important;
+  background: #007bff !important;
+  color: white !important;
+  padding: 0.25rem 0.75rem !important;
+  border-radius: 20px !important;
+  font-size: 0.875rem !important;
+  font-weight: 600 !important;
 }
 
-.atributo-modificado {
-  position: relative;
-}
-
-.atributo-modificado::after {
-  content: '✨';
-  position: absolute;
-  top: -5px;
-  right: -5px;
-  font-size: 1.2rem;
-}
-
-/* ==================== EFECTOS Y ANIMACIONES ==================== */
-.efecto-aparicion {
-  animation: aparicion 0.5s ease-out;
-}
-
-@keyframes aparicion {
-  from {
-    opacity: 0;
-    transform: translateY(30px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-.efecto-desaparicion {
-  animation: desaparicion 0.3s ease-in forwards;
-}
-
-@keyframes desaparicion {
-  to {
-    opacity: 0;
-    transform: scale(0.8);
-  }
-}
-
-/* ==================== RESPONSIVE ==================== */
 @media (max-width: 768px) {
   .main-container {
-    margin: 1rem;
-    padding: 1rem;
+    margin: 1rem !important;
+    padding: 1rem !important;
   }
   
   .productos-grid {
-    grid-template-columns: 1fr;
+    grid-template-columns: 1fr !important;
   }
-  
-  .control-panel {
-    text-align: center;
-  }
-  
-  .control-btn {
-    display: block;
-    width: 100%;
-    margin: 0.5rem 0;
-  }
-}
-
-/* ==================== ESTADOS DINÁMICOS ==================== */
-.processing {
-  pointer-events: none;
-  opacity: 0.7;
-  filter: blur(1px);
-}
-
-.highlight-temporary {
-  animation: highlight 1s ease-in-out;
-}
-
-@keyframes highlight {
-  0%, 100% { background: white; }
-  50% { background: #fff3cd; }
 }

@@ -465,17 +465,6 @@ function mostrarModal(titulo, contenido) {
     modal.show();
 }
 
-function obtenerColorRol(rol) {
-    // ESTRUCTURA SWITCH-CASE para colores de roles
-    switch(rol) {
-        case 'admin': return 'danger';
-        case 'gerente': return 'warning';
-        case 'empleado': return 'info';
-        case 'cliente': return 'success';
-        default: return 'secondary';
-    }
-}
-
 function togglePassword() {
     const passwordInput = document.getElementById('password');
     const eyeIcon = document.getElementById('eyeIcon');
@@ -519,45 +508,6 @@ function verificarSesionExistente() {
     }
 }
 
-function mostrarMensajeBienvenida() {
-    // Prompt JavaScript de bienvenida
-    setTimeout(() => {
-        if (confirm('👋 ¡Bienvenido al Sistema ElectroHogar!\n\n¿Deseas ver una demostración de las funcionalidades?')) {
-            mostrarDemo();
-        }
-    }, 1000);
-}
-
-function mostrarDemo() {
-    const demoContent = `
-        <div class="text-start">
-            <h5>🎯 Funcionalidades Implementadas:</h5>
-            <ul class="list-unstyled">
-                <li>✅ <strong>Variables y Constantes:</strong> Configuración del sistema</li>
-                <li>✅ <strong>Arreglos Bidimensionales:</strong> Base de datos de usuarios</li>
-                <li>✅ <strong>Estructuras IF-ELSE:</strong> Validaciones y autenticación</li>
-                <li>✅ <strong>Estructuras FOR:</strong> Búsqueda de usuarios y generación de partículas</li>
-                <li>✅ <strong>Estructura WHILE:</strong> Control de intentos</li>
-                <li>✅ <strong>Estructura SWITCH-CASE:</strong> Manejo de roles y atajos</li>
-                <li>✅ <strong>Estructura FOREACH:</strong> Mostrar usuarios</li>
-                <li>✅ <strong>Manipulación DOM:</strong> Efectos dinámicos</li>
-                <li>✅ <strong>Prompt/Confirm/Alert:</strong> Interacción con usuario</li>
-                <li>✅ <strong>Ventanas Flotantes:</strong> Modales informativos</li>
-                <li>✅ <strong>Personalización JavaScript:</strong> Temas y tipografía</li>
-            </ul>
-            
-            <div class="alert alert-info mt-3">
-                <strong>💡 Usuarios de prueba:</strong><br>
-                • admin / 123 (Administrador)<br>
-                • gerente / 456 (Gerente)<br>
-                • empleado1 / 789 (Empleado)<br>
-                • demo / demo (Cliente)
-            </div>
-        </div>
-    `;
-    
-    mostrarModal('Demo del Sistema', demoContent);
-}
 
 function mostrarAyuda() {
     const ayudaContent = `
