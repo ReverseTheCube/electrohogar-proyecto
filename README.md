@@ -1,4 +1,5 @@
 🏪 ElectroHogar - Tienda de Electrodomésticos
+gg
 
 Tienda online completa con carrito de compras, checkout y panel de administración
 
