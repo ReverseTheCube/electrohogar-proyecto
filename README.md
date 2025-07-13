@@ -3,7 +3,7 @@
 Tienda online completa con carrito de compras, checkout y panel de administración
 
 🌐 Ver Proyecto
-🔗 https://tuusuario.github.io/electrohogar-proyecto/
+🔗 https://reversethecube.github.io/electrohogar-proyecto/
 
 📋 Descripción
 ElectroHogar es una tienda online de electrodomésticos desarrollada como proyecto final del curso Taller de Programación Web. Incluye todas las funcionalidades de un e-commerce moderno: catálogo de productos, carrito de compras, proceso de checkout completo y panel de administración.
@@ -88,6 +88,7 @@ electrohogar/
 │       └── [otros módulos...]
 └── imagenes/
 ✅ Requisitos Académicos Cumplidos
+
 Primera Entrega
 
 ✅ 14 páginas web (12+ requeridas)
@@ -126,32 +127,19 @@ Modern CSS: Variables CSS, Flexbox, Grid
 ES6 Modules: Código JavaScript modular y organizado
 
 👨‍🎓 Información Académica
+
 Estudiante: [Tu Nombre]
 Curso: Taller de Programación Web
 Docente: MBA Mg. Ing. Rene Alonso Nieto Valencia
 Universidad: Universidad Tecnológica del Perú (UTP)
 Año: 2025
+
 📞 Contacto
 
 Email: [tu-email@utp.edu.pe]
 GitHub: @tu-usuario
 LinkedIn: [tu-perfil-linkedin]
 
-
-🚀 Instalación Local (Opcional)
-bash# Clonar repositorio
-git clone https://github.com/tu-usuario/electrohogar-proyecto.git
-
-# Navegar al directorio
-cd electrohogar-proyecto
-
-# Ejecutar servidor local (Python)
-python -m http.server 8000
-
-# O con Node.js
-npx serve .
-
-# Visitar: http://localhost:8000
 
 ⭐ Si te gusta este proyecto, dale una estrella en GitHub ⭐
 Proyecto desarrollado como parte del aprendizaje de tecnologías web modernas
